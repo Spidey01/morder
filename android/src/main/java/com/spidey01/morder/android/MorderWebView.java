@@ -16,23 +16,28 @@
 
 package com.spidey01.morder.android;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.webkit.WebView;
 
 
-public class BrowserActivity extends Activity {
+/**
+ * Created by terry on 11/22/2014.
+ */
+public class MorderWebView
+    extends WebView
+{
+    public MorderWebView(Context context) {
+        super(context);
+    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.browser_activity);
 
-        MorderWebView view = (MorderWebView) findViewById(R.id.webview);
-        view.setWebViewClient(new MorderWebViewClient());
-        if (view != null) {
-            view.loadUrl("http://www.google.com");
-        }
+    public MorderWebView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+
+    public MorderWebView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 }
