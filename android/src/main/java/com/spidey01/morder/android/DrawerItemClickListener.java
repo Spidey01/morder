@@ -16,6 +16,8 @@
 
 package com.spidey01.morder.android;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,6 +30,8 @@ import android.widget.ListView;
 public class DrawerItemClickListener
     implements ListView.OnItemClickListener
 {
+    private static final String TAG = "DrawerItemClickListener";
+
     /**
      * Callback method to be invoked when an item in this AdapterView has
      * been clicked.
@@ -43,6 +47,10 @@ public class DrawerItemClickListener
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.d("DrawerItemClickListener", "You clicked position " + position + " with id " + id);
+        Log.d(TAG, "You clicked position " + position + " with id " + id);
+        Context context = parent.getContext();
+        // there's only one item right now 8-).
+        Intent intent = new Intent(context, SettingsActivity.class);
+        context.startActivity(intent);
     }
 }
