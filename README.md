@@ -1,4 +1,4 @@
-Morder -- Assassinate your browser
+Mörder -- Assassinate your browser
 ==================================
 
 Basic goal is to replace Chrome. First on Android tablet and then on desktop
