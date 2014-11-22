@@ -18,16 +18,24 @@ package com.spidey01.morder.android;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 
-public class BrowserActivity extends Activity {
+public class BrowserActivity
+    extends Activity
+{
+    private DrawerItemClickListener mDrawerListener = new DrawerItemClickListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browser_activity);
+
+        enableDrawer();
 
         MorderWebView view = (MorderWebView) findViewById(R.id.webview);
         view.setWebViewClient(new MorderWebViewClient());
@@ -35,4 +43,18 @@ public class BrowserActivity extends Activity {
             view.loadUrl("http://www.google.com");
         }
     }
+
+
+    public void enableDrawer() {
+        String[] activities = getResources().getStringArray(R.array.drawer_array);
+        DrawerLayout layout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        ListView view = (ListView)findViewById(R.id.drawer_view);
+        ArrayAdapter<String> adapter =
+            new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, activities);
+
+        view.setAdapter(adapter);
+        view.setOnItemClickListener(mDrawerListener);
+    }
 }
+
+
