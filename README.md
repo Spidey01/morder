@@ -6,9 +6,9 @@ and phone if possible.
 
 My priorities are this:
 
-	1. Performance.
-	2. Usability.
-	3. Reliability.
+  1. Performance.
+  2. Usability.
+  3. Reliability.
 
 
 Also it would be nice to not pull my hair out in frustration.
