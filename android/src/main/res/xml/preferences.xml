@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright 2014 Terry Mathew Poulin <BigBoss1964@gmail.com>
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <EditTextPreference
+    android:key="pref_newTabPage"
+    android:title="@string/pref_newTabPage_title"
+    android:dialogTitle="@string/pref_newTabPage_title"
+    android:defaultValue="@string/pref_newTabPage_default" />
+
+  <ListPreference
+    android:key="pref_userAgentEmulation"
+    android:title="@string/pref_userAgentEmulation_title"
+    android:dialogTitle="@string/pref_userAgentEmulation_title"
+    android:summary="@string/pref_userAgentEmulation_summery"
+    android:entries="@array/pref_userAgentEmulation_entries"
+    android:entryValues="@array/pref_userAgentEmulation_values"
+    android:defaultValue="@string/pref_userAgentEmulation_default" />
+
+  <ListPreference
+    android:key="pref_userAgentMode"
+    android:title="@string/pref_userAgentMode_title"
+    android:dialogTitle="@string/pref_userAgentMode_title"
+    android:summary="@string/pref_userAgentMode_summery"
+    android:entries="@array/pref_userAgentMode_entries"
+    android:entryValues="@array/pref_userAgentMode_values"
+    android:defaultValue="@string/pref_userAgentMode_default" />
+
+</PreferenceScreen>

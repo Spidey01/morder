@@ -16,6 +16,8 @@
 
 package com.spidey01.morder.android;
 
+import com.spidey01.morder.android.settings.SettingsActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
