@@ -49,4 +49,18 @@
 
     </PreferenceCategory>
 
+    <!-- Advanced settings -->
+    <PreferenceCategory
+        android:key="@string/pref_advanced_key"
+        android:title="@string/pref_advanced_title">
+
+        <CheckBoxPreference
+            android:key="@string/pref_javascript_key"
+            android:title="@string/pref_javascript_title"
+            android:defaultValue="true"
+            android:summaryOff="@string/pref_javascript_summeryoff"
+            android:summaryOn="@string/pref_javascript_summeryon" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
