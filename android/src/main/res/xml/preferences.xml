@@ -18,28 +18,35 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <EditTextPreference
-    android:key="pref_newTabPage"
-    android:title="@string/pref_newTabPage_title"
-    android:dialogTitle="@string/pref_newTabPage_title"
-    android:defaultValue="@string/pref_newTabPage_default" />
+    <EditTextPreference
+        android:defaultValue="@string/pref_newTabPage_default"
+        android:dialogTitle="@string/pref_newTabPage_title"
+        android:key="pref_newTabPage"
+        android:title="@string/pref_newTabPage_title"/>
 
-  <ListPreference
-    android:key="pref_userAgentEmulation"
-    android:title="@string/pref_userAgentEmulation_title"
-    android:dialogTitle="@string/pref_userAgentEmulation_title"
-    android:summary="@string/pref_userAgentEmulation_summery"
-    android:entries="@array/pref_userAgentEmulation_entries"
-    android:entryValues="@array/pref_userAgentEmulation_values"
-    android:defaultValue="@string/pref_userAgentEmulation_default" />
 
-  <ListPreference
-    android:key="pref_userAgentMode"
-    android:title="@string/pref_userAgentMode_title"
-    android:dialogTitle="@string/pref_userAgentMode_title"
-    android:summary="@string/pref_userAgentMode_summery"
-    android:entries="@array/pref_userAgentMode_entries"
-    android:entryValues="@array/pref_userAgentMode_values"
-    android:defaultValue="@string/pref_userAgentMode_default" />
+    <PreferenceCategory
+        android:key="pref_userAgent_title"
+        android:title="@string/pref_userAgent_title">
+
+        <ListPreference
+            android:defaultValue="@string/pref_userAgentEmulation_default"
+            android:dialogTitle="@string/pref_userAgentEmulation_title"
+            android:entries="@array/pref_userAgentEmulation_entries"
+            android:entryValues="@array/pref_userAgentEmulation_values"
+            android:key="pref_userAgentEmulation"
+            android:summary="@string/pref_userAgentEmulation_summery"
+            android:title="@string/pref_userAgentEmulation_title"/>
+
+        <ListPreference
+            android:defaultValue="@string/pref_userAgentMode_default"
+            android:dialogTitle="@string/pref_userAgentMode_title"
+            android:entries="@array/pref_userAgentMode_entries"
+            android:entryValues="@array/pref_userAgentMode_values"
+            android:key="pref_userAgentMode"
+            android:summary="@string/pref_userAgentMode_summery"
+            android:title="@string/pref_userAgentMode_title"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

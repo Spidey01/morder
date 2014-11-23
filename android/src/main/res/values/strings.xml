@@ -11,6 +11,8 @@
     <string name="pref_newTabPage_title">Home Page</string>
     <string name="pref_newTabPage_default">http://www.google.com/</string>
 
+    <string name="pref_userAgent_title">User Agent</string>
+
     <string name="pref_userAgentEmulation_title">User Agent Emulation</string>
     <string name="pref_userAgentEmulation_summery">Masquerade as another browser</string>
     <string name="pref_userAgentEmulation_default">None</string>
