@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.spidey01.morder.android;
+package com.spidey01.morder.android.browser;
 
 import android.content.Context;
 import android.util.AttributeSet;

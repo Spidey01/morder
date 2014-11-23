@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.spidey01.morder.android;
+package com.spidey01.morder.android.browser;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.spidey01.morder.android.DrawerItemClickListener;
+import com.spidey01.morder.android.R;
 
 
 public class BrowserActivity

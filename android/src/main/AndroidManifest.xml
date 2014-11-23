@@ -26,7 +26,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name="com.spidey01.morder.android.BrowserActivity"
+            android:name=".browser.BrowserActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,12 +36,12 @@
         </activity>
 
         <activity
-            android:name="com.spidey01.morder.android.settings.SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.spidey01.morder.android.BrowserActivity" >
+            android:parentActivityName=".browser.BrowserActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.spidey01.morder.android.BrowserActivity" />
+                android:value=".browser.BrowserActivity" />
         </activity>
 
     </application>
