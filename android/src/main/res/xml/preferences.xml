@@ -21,12 +21,12 @@
     <EditTextPreference
         android:defaultValue="@string/pref_newTabPage_default"
         android:dialogTitle="@string/pref_newTabPage_title"
-        android:key="pref_newTabPage"
+        android:key="@string/pref_newTabPage_key"
         android:title="@string/pref_newTabPage_title"/>
 
 
     <PreferenceCategory
-        android:key="@string/pref_newTabPage_key"
+        android:key="@string/pref_userAgent_key"
         android:title="@string/pref_userAgent_title">
 
         <ListPreference
