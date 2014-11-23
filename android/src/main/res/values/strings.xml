@@ -8,6 +8,7 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="action_settings">Settings</string>
 
+    <string name="pref_newTabPage_key">pref_userAgent_title</string>
     <string name="pref_newTabPage_title">Home Page</string>
     <string name="pref_newTabPage_default">http://www.google.com/</string>
 

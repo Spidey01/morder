@@ -18,7 +18,9 @@ package com.spidey01.morder.android;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -28,6 +30,8 @@ import android.widget.ListView;
 public class BrowserActivity
     extends Activity
 {
+    private static final String TAG = "BrowserActivity";
+
     private DrawerItemClickListener mDrawerListener = new DrawerItemClickListener();
 
     @Override
@@ -40,7 +44,12 @@ public class BrowserActivity
         MorderWebView view = (MorderWebView) findViewById(R.id.webview);
         view.setWebViewClient(new MorderWebViewClient());
         if (view != null) {
-            view.loadUrl("http://www.google.com");
+            final String home = getResources().getString(R.string.pref_newTabPage_key);
+            final String def = getResources().getString(R.string.pref_newTabPage_default);
+            /* Huh? We get "pref_userAgent_title" instead of the text boxes stuff. */
+            Log.d(TAG, "saved home page: " + home);
+            Log.d(TAG, "default home page: " + def);
+            view.loadUrl(PreferenceManager.getDefaultSharedPreferences(this).getString(home, def));
         }
     }
 

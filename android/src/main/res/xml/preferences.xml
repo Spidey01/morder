@@ -26,7 +26,7 @@
 
 
     <PreferenceCategory
-        android:key="pref_userAgent_title"
+        android:key="@string/pref_newTabPage_key"
         android:title="@string/pref_userAgent_title">
 
         <ListPreference
