@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.spidey01.morder.android.DrawerItemClickListener;
@@ -34,9 +35,12 @@ public class BrowserActivity
 
     private DrawerItemClickListener mDrawerListener = new DrawerItemClickListener();
 
+    private MorderWebView mWebView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -44,20 +48,15 @@ public class BrowserActivity
 
         enableDrawer();
 
-        MorderWebView view = (MorderWebView) findViewById(R.id.webview);
-        view.setWebViewClient(new MorderWebViewClient());
-        if (view != null) {
-            final String home = getResources().getString(R.string.pref_newTabPage_key);
-            final String def = getResources().getString(R.string.pref_newTabPage_default);
-            /* Huh? We get "pref_userAgent_title" instead of the text boxes stuff. */
-            Log.d(TAG, "saved home page: " + home);
-            Log.d(TAG, "default home page: " + def);
-            view.loadUrl(PreferenceManager.getDefaultSharedPreferences(this).getString(home, def));
-        }
+        mWebView = (MorderWebView)findViewById(R.id.webview);
+        mWebView.setup(PreferenceManager.getDefaultSharedPreferences(this));
+        mWebView.loadUrl(mWebView.getHomePage());
     }
 
 
     public void enableDrawer() {
+        Log.d(TAG, "enableDrawer()");
+
         String[] activities = getResources().getStringArray(R.array.drawer_array);
         DrawerLayout layout = (DrawerLayout)findViewById(R.id.drawer_layout);
         ListView view = (ListView)findViewById(R.id.drawer_view);
@@ -67,6 +66,24 @@ public class BrowserActivity
         view.setAdapter(adapter);
         view.setOnItemClickListener(mDrawerListener);
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume()");
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(mWebView);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause()");
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mWebView);
+    }
+
+
 }
 
 

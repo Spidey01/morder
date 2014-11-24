@@ -57,7 +57,7 @@
         <CheckBoxPreference
             android:key="@string/pref_javascript_key"
             android:title="@string/pref_javascript_title"
-            android:defaultValue="true"
+            android:defaultValue="@bool/pref_javascript_default"
             android:summaryOff="@string/pref_javascript_summeryoff"
             android:summaryOn="@string/pref_javascript_summeryon" />
 
