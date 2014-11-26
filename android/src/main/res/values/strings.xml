@@ -15,10 +15,12 @@
     <string name="pref_userAgent_key">pref_userAgent_title</string>
     <string name="pref_userAgent_title">User Agent</string>
 
+    <string name="pref_userAgentEmulation_key">pref_userAgentEmulation_key</string>
     <string name="pref_userAgentEmulation_title">User Agent Emulation</string>
     <string name="pref_userAgentEmulation_summery">Masquerade as another browser</string>
     <string name="pref_userAgentEmulation_default">None</string>
 
+    <string name="pref_userAgentMode_key">pref_userAgentMode_key</string>
     <string name="pref_userAgentMode_title">User Agent Mode</string>
     <string name="pref_userAgentMode_summery">Device type to report in user agent string</string>
     <string name="pref_userAgentMode_default">Default</string>

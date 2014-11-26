@@ -34,7 +34,7 @@
             android:dialogTitle="@string/pref_userAgentEmulation_title"
             android:entries="@array/pref_userAgentEmulation_entries"
             android:entryValues="@array/pref_userAgentEmulation_values"
-            android:key="pref_userAgentEmulation"
+            android:key="@string/pref_userAgentEmulation_key"
             android:summary="@string/pref_userAgentEmulation_summery"
             android:title="@string/pref_userAgentEmulation_title"/>
 
@@ -43,7 +43,7 @@
             android:dialogTitle="@string/pref_userAgentMode_title"
             android:entries="@array/pref_userAgentMode_entries"
             android:entryValues="@array/pref_userAgentMode_values"
-            android:key="pref_userAgentMode"
+            android:key="@string/pref_userAgentMode_key"
             android:summary="@string/pref_userAgentMode_summery"
             android:title="@string/pref_userAgentMode_title"/>
 
