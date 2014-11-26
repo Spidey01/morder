@@ -44,7 +44,7 @@ public class BrowserActivity
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        setContentView(R.layout.browser_activity);
+        setContentView(R.layout.activity_browser);
 
         enableDrawer();
 
