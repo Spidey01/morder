@@ -19,6 +19,7 @@ package com.spidey01.morder.android.browser;
 import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -26,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.spidey01.morder.android.DrawerItemClickListener;
 import com.spidey01.morder.android.R;
+import com.spidey01.morder.android.ui.ActionBarDrawerToggle;
 
 
 public class BrowserActivity
@@ -54,6 +56,7 @@ public class BrowserActivity
     }
 
 
+    private ActionBarDrawerToggle mDrawerToggle;
     public void enableDrawer() {
         Log.d(TAG, "enableDrawer()");
 
@@ -65,6 +68,13 @@ public class BrowserActivity
 
         view.setAdapter(adapter);
         view.setOnItemClickListener(mDrawerListener);
+
+        assert mDrawerToggle == null;
+        mDrawerToggle = new ActionBarDrawerToggle(this, layout);
+        layout.setDrawerListener(mDrawerToggle);
+
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
     }
 
 
@@ -104,8 +114,8 @@ public class BrowserActivity
      * <p>Other additional default key handling may be performed
      * if configured with {@link #setDefaultKeyMode}.
      *
-     * @param keyCode
-     * @param event
+     * @param keyCode code for key.
+     * @param event event for key.
      * @return Return <code>true</code> to prevent this event from being propagated
      * further, or <code>false</code> to indicate that you have not handled
      * this event and it should continue to be propagated.
@@ -113,7 +123,7 @@ public class BrowserActivity
      * @see android.view.KeyEvent
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
         // Note: Android calls backspace DEL and delete FORWARD_DEL.
         if ((keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_DEL)
             && mWebView.canGoBack())
@@ -125,7 +135,5 @@ public class BrowserActivity
         return super.onKeyDown(keyCode, event);
     }
 
-
 }
-
 

@@ -4,6 +4,10 @@
     <string name="app_name">Morder</string>
     <string name="hello_world">Hello world!</string>
 
+    <!-- strings for the navigation drawer -->
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
     <!-- strings for SettingsActivity & friends. -->
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="action_settings">Settings</string>
