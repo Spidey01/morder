@@ -32,8 +32,8 @@
         <ListPreference
             android:defaultValue="@string/pref_userAgentMode_default"
             android:dialogTitle="@string/pref_userAgentMode_title"
-            android:entries="@array/pref_userAgentMode_entries"
-            android:entryValues="@array/pref_userAgentMode_values"
+            android:entries="@array/pref_userAgentMode_array"
+            android:entryValues="@array/pref_userAgentMode_array"
             android:key="@string/pref_userAgentMode_key"
             android:summary="@string/pref_userAgentMode_summery"
             android:title="@string/pref_userAgentMode_title"/>

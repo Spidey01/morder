@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import com.spidey01.morder.android.R;
 
@@ -82,6 +83,7 @@ public class MorderWebView
 
     private static final String PREF_NEW_TAB_PAGE = "pref_newTabPage_key";
     private static final String PREF_ENABLE_JAVASCRIPT = "pref_javascript_key";
+    private static final String PREF_USER_AGENT_MODE = "pref_userAgentMode_key";
 
 
     private final void assertPreferences() {
@@ -110,6 +112,7 @@ public class MorderWebView
                 disableJavaScript();
             }
         }
+        // Dynamic UA updating?
     }
 
 
@@ -121,6 +124,59 @@ public class MorderWebView
         final String defaultHomePage = res.getString(R.string.pref_newTabPage_key);
         mHomePage = prefs.getString(PREF_NEW_TAB_PAGE, defaultHomePage);
         Log.d(TAG, "default home page is: " + mHomePage);
+
+        String userAgentMode = prefs.getString(PREF_USER_AGENT_MODE,
+                res.getString(R.string.pref_userAgentMode_default));
+        Log.d(TAG, "setup(): userAgentMode=" + userAgentMode);
+        WebSettings settings = getSettings();
+        String baseUA = settings.getUserAgentString();
+        final String morderElement = " Morder/0";
+        switch (userAgentMode) {
+            case "Smart":
+                /*
+                 * WebView already has the desired behaviour of stuff in "Mobile"
+                 * on phone and leave it be otherwise. So just update your UA.
+                 */
+                settings.setUserAgentString(baseUA + morderElement);
+                break;
+            case "Phone":
+                if (baseUA.matches("Mobile")) {
+                    settings.setUserAgentString(baseUA + morderElement);
+                } else {
+                    /* Technically we should find "Chrome/ver Safari/ver"
+                     * and insert Mobile in between.
+                     *
+                     * This should be sufficent though.
+                     */
+                    settings.setUserAgentString(baseUA + " Mobile" + morderElement);
+                }
+                break;
+            case "Tablet":
+                settings.setUserAgentString(baseUA.replace(" Mobile ", " ") + morderElement);
+                break;
+            case "Desktop":
+                StringBuilder buffer = new StringBuilder(baseUA.length());
+                boolean inParen = false;
+                for (String word : baseUA.split(" ")) {
+                    if (word.startsWith("(Linux;")) {
+                        inParen = true;
+                        buffer.append("(X11; Linux x86_64) ");
+                    } else if (inParen) {
+                        if (word.contains(")")) {
+                            inParen = false;
+                        }
+                    } else {
+                        buffer.append(word);
+                        buffer.append(" ");
+                    }
+                }
+                settings.setUserAgentString(buffer.toString().replace(" Mobile ", " ").trim()+ morderElement);
+                break;
+            default:
+                Log.e(TAG, "setup(): Unknown user agent mode " + userAgentMode);
+                break;
+        }
+        Log.i(TAG, "setup(): user agent => " + settings.getUserAgentString());
 
         final boolean defaultJS = res.getBoolean(R.bool.pref_javascript_default);
         if (prefs.getBoolean(PREF_ENABLE_JAVASCRIPT, defaultJS)) {
