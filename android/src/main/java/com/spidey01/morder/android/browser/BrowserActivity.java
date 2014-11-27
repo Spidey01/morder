@@ -74,9 +74,6 @@ public class BrowserActivity
         assert mDrawerToggle == null;
         mDrawerToggle = new ActionBarDrawerToggle(this, layout);
         layout.setDrawerListener(mDrawerToggle);
-
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
     }
 
 
