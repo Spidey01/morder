@@ -16,6 +16,7 @@
 
 package com.spidey01.morder.android.ui;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -72,13 +73,20 @@ public class ActionBarDrawerToggle
         mTitle = mActivity.getTitle().toString();
         mDrawerLayout = drawerLayout;
 
+        ActionBar actionBar = mActivity.getActionBar();
+
+        if (actionBar == null) {
+            Log.w(TAG, "initialize(): No ActionBar in "+mActivity.getTitle());
+            return;
+        }
+
         // This gets our ActionBarDrawerToggle showing our ic_drawer icon next
         // to our app icon thingy as a drawer toggle.
-        mActivity.getActionBar().setDisplayHomeAsUpEnabled(true);
+       actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Does this do anything for us? Doesn't seem like it on Kit Kat
         // and our top level view.
-        //mActivity.getActionBar().setHomeButtonEnabled(true);
+        //actionBar.setHomeButtonEnabled(true);
 
     }
 
