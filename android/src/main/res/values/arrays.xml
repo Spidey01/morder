@@ -23,18 +23,6 @@
     <item>@string/action_quit</item>
   </string-array>
 
-  <!-- Used to determine what user agent to emulate. -->
-  <string-array name="pref_userAgentEmulation_entries">
-    <item>None</item>
-    <item>Chrome</item>
-    <item>Firefox</item>
-    <item>Internet Explorer</item>
-    <item>Opera</item>
-    <item>Safari</item>
-  </string-array>
-  <string-array name="pref_userAgentEmulation_values">
-  </string-array>
-
   <!-- Used to determine user agent emulation mode. -->
   <string-array name="pref_userAgentMode_entries">
     <item>Default</item>
