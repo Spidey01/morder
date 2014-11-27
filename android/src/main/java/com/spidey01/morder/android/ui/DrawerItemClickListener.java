@@ -16,6 +16,7 @@
 
 package com.spidey01.morder.android.ui;
 
+import android.app.Activity;
 import com.spidey01.morder.android.settings.SettingsActivity;
 
 import android.content.Context;
@@ -24,6 +25,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+
 
 
 /**
@@ -51,8 +54,23 @@ public class DrawerItemClickListener
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "You clicked position " + position + " with id " + id);
         Context context = parent.getContext();
-        // there's only one item right now 8-).
-        Intent intent = new Intent(context, SettingsActivity.class);
+
+        final String item = ((TextView)view).getText().toString();
+        Log.d(TAG, "onItemClick(): " + item);
+
+        Intent intent = null;
+        switch(item) {
+            case "Settings":
+                intent = new Intent(context, SettingsActivity.class);
+                break;
+            case "Quit":
+                ((Activity)context).finish();
+                return;
+            default:
+                Log.e(TAG, "onItemClick(): don't know " + item);
+                return;
+        }
+
         context.startActivity(intent);
     }
 }

@@ -19,7 +19,8 @@
 
   <!-- List of activity names for the navigation drawer. -->
   <string-array name="drawer_array">
-    <item>Settings</item>
+    <item>@string/action_settings</item>
+    <item>@string/action_quit</item>
   </string-array>
 
   <!-- Used to determine what user agent to emulate. -->
