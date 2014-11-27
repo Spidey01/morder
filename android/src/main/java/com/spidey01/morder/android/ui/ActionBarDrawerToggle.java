@@ -90,6 +90,8 @@ public class ActionBarDrawerToggle
 
         // TODO: What do we want here?
         mActivity.getActionBar().setTitle(mTitle);
+
+        mActivity.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
     }
 
 
@@ -99,5 +101,7 @@ public class ActionBarDrawerToggle
         Log.v(TAG, "onDrawerClosed()");
 
         mActivity.getActionBar().setTitle(mTitle);
+
+        mActivity.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
     }
 }
