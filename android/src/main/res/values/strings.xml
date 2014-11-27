@@ -31,7 +31,7 @@
     <string name="pref_userAgentMode_default">Default</string>
 
     <string name="pref_advanced_key">pref_advanced_key</string>
-    <string name="pref_advanced_title">pref_advanced_title</string>
+    <string name="pref_advanced_title">Advanced</string>
 
     <string name="pref_javascript_key">pref_javascript_key</string>
     <string name="pref_javascript_title">Enable JavaScript</string>
