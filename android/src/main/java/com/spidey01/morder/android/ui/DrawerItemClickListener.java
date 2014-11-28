@@ -63,6 +63,8 @@ public class DrawerItemClickListener
             case "Settings":
                 intent = new Intent(context, SettingsActivity.class);
                 break;
+            case "About":
+                intent = new Intent(context, AboutActivity.class);
             case "Quit":
                 ((Activity)context).finish();
                 return;
@@ -71,6 +73,7 @@ public class DrawerItemClickListener
                 return;
         }
 
+        Log.i(TAG, "Launching activity for " + item);
         context.startActivity(intent);
     }
 }

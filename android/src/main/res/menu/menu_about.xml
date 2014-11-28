@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2014 Terry Mathew Poulin <BigBoss1964@gmail.com>
   ~
@@ -15,21 +14,11 @@
   ~ limitations under the License.
   -->
 
-<resources>
-
-  <!-- List of activity names for the navigation drawer. -->
-  <string-array name="drawer_array">
-    <item>@string/action_settings</item>
-    <item>@string/action_about</item>
-    <item>@string/action_quit</item>
-  </string-array>
-
-  <!-- Used to determine user agent emulation mode. -->
-  <string-array name="pref_userAgentMode_array">
-    <item>@string/pref_userAgentMode_default</item>
-    <item>Phone</item>
-    <item>Tablet</item>
-    <item>Desktop</item>
-  </string-array>
-
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.spidey01.morder.android.ui.AboutActivity" >
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+</menu>
