@@ -17,10 +17,13 @@
 package com.spidey01.morder.android.browser;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +32,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ShareActionProvider;
 import com.spidey01.morder.android.ui.DrawerItemClickListener;
 import com.spidey01.morder.android.R;
 import com.spidey01.morder.android.ui.ActionBarDrawerToggle;
@@ -42,6 +46,9 @@ public class BrowserActivity
     private DrawerItemClickListener mDrawerListener = new DrawerItemClickListener();
 
     private MorderWebView mWebView;
+
+    private ShareActionProvider mShareActionProvider;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,7 +198,17 @@ public class BrowserActivity
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_browser_activity_actions, menu);
+
+
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
+        // Set the initial default.
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setData(Uri.parse(mWebView.getUrl()));
+        mShareActionProvider.setShareIntent(intent);
+
         return super.onCreateOptionsMenu(menu);
     }
-}
 
+
+}
