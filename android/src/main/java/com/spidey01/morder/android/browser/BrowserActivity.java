@@ -21,6 +21,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -152,6 +154,8 @@ public class BrowserActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected()");
+
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
         if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -159,9 +163,35 @@ public class BrowserActivity
         }
         // Handle your other action bar items...
 
+        switch(item.getItemId()) {
+            case R.id.action_back:
+                if (mWebView.canGoBack()) {
+                    mWebView.goBack();
+                }
+                break;
+            case R.id.action_forward:
+                if (mWebView.canGoForward()) {
+                    mWebView.goForward();
+                }
+            /*
+            default:
+                Log.e(TAG, "onOptionsItemSelected(): unknown item:" + item.toString());
+                break;
+            */
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG, "onCreateOptionsMenu()");
+
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_browser_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }
 

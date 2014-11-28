@@ -11,6 +11,10 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
+    <!-- strings for BrowserActivity -->
+    <string name="action_back">Go back</string>
+    <string name="action_forward">Go forward</string>
+
     <!-- strings for SettingsActivity & friends. -->
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="pref_newTabPage_key">pref_newTabPage_key</string>
