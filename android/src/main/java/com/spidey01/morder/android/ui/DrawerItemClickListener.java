@@ -65,6 +65,7 @@ public class DrawerItemClickListener
                 break;
             case "About":
                 intent = new Intent(context, AboutActivity.class);
+                break;
             case "Quit":
                 ((Activity)context).finish();
                 return;
