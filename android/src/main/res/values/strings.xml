@@ -35,4 +35,6 @@
     <string name="pref_javascript_summeryon">Websites can use JavaScript. Dynamic web time, script time!</string>
     <string name="title_activity_about">AboutActivity</string>
 
+    <!-- strings for AboutActivity -->
+
 </resources>

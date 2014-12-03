@@ -21,7 +21,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
 import com.spidey01.morder.android.R;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class AboutActivity extends Activity {
     private static final String TAG = "AboutActivity";
@@ -32,6 +38,30 @@ public class AboutActivity extends Activity {
         Log.d(TAG, "onCreate()");
 
         setContentView(R.layout.activity_about);
+
+        WebView view = (WebView)findViewById(R.id.about_webview);
+        if (view == null) {
+            Log.e(TAG, "view is null!");
+            return;
+        }
+
+        view.loadData(getLicense(), "text/html", "UTF8");
+    }
+
+
+    private String getLicense() {
+        try {
+            InputStream stream =  getAssets().open("license.html;");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF8"));
+            StringBuilder buffer = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) { buffer.append(line+"\n"); }
+            reader.close();
+            return buffer.toString();
+        } catch (IOException ex) {
+            Log.e(TAG, "getLicense() failed", ex);
+            return ex.toString();
+        }
     }
 
 
