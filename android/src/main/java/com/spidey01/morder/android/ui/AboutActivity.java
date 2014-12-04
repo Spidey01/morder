@@ -45,17 +45,22 @@ public class AboutActivity extends Activity {
             return;
         }
 
-        view.loadData(getLicense(), "text/html", "UTF8");
+        //view.loadData(getLicense(), "text/html", null);
+        view.loadUrl(getLicense());
     }
 
 
     private String getLicense() {
         try {
-            InputStream stream =  getAssets().open("license.html;");
+            InputStream stream =  getAssets().open("license.html");
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF8"));
-            StringBuilder buffer = new StringBuilder();
             String line;
-            while ((line = reader.readLine()) != null) { buffer.append(line+"\n"); }
+            StringBuilder buffer = new StringBuilder();
+            /*
+             * Makes sure that the character set will be loaded correctly.
+             */
+            buffer.append("data:text/html;charset=UTF8;,");
+            while ((line = reader.readLine()) != null) { buffer.append(line); }
             reader.close();
             return buffer.toString();
         } catch (IOException ex) {
