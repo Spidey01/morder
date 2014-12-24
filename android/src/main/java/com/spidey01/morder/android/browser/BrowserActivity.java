@@ -53,7 +53,7 @@ public class BrowserActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate()");
+        Log.d(TAG, "onCreate(): " + savedInstanceState);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -63,7 +63,16 @@ public class BrowserActivity
 
         mWebView = (MorderWebView)findViewById(R.id.webview);
         mWebView.setup(PreferenceManager.getDefaultSharedPreferences(this));
-        mWebView.loadUrl(mWebView.getHomePage());
+        //mWebView.loadUrl(mWebView.getHomePage());
+        Intent intent = getIntent();
+        if (intent.getData() == null) {
+            Log.d(TAG, "No intent: load home page");
+            mWebView.loadUrl(mWebView.getHomePage());
+        } else {
+            Log.d(TAG, "we got an intent url to load!");
+            mWebView.loadUrl(intent.getData().toString());
+        }
+
     }
 
 

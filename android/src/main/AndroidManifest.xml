@@ -27,10 +27,44 @@
         <activity
             android:name="com.spidey01.morder.android.browser.BrowserActivity"
             android:label="@string/app_name" >
+
+            <!-- Allows us to receive intents for web pages. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <!-- mimeType's we'd be interested in: -->
+                <!--
+                    <data android:mimeType="text/html" />
+                    <data android:mimeType="application/xhtml+xml" />
+                -->
+                <!--XHTML Mobile Profile (XHTML MP). -->
+                <!-- Not sure if I care about this.
+                     But the AOSP HtmlViewer app uses it so maybe I should. -->
+                <!--
+                    <data android:mimeType="application/vnd.wap.xhtml+xml" />
+                -->
+                <!-- Do web archives need any extra code? -->
+                <!--
+                <data android:mimeType="application/x-webarchive-xml"/>
+                -->
+                <!-- But we don't define these because it seems to break things.
+                     Like clicking a link in G+:
+                     defining memeType == no appear in chooser.
+                -->
+        </intent-filter>
+
+        <!-- Launcher icon. -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.APP_BROWSER" />
             </intent-filter>
         </activity>
         <activity
