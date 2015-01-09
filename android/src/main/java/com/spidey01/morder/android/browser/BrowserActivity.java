@@ -165,6 +165,17 @@ public class BrowserActivity
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+
+        /*
+         * Handle landscape / portrait orientation change
+         */
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.d(TAG, "onConfigurationChanged(): Configuration.ORIENTATION_LANDSCAPE");
+            //Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            Log.d(TAG, "onConfigurationChanged(): Configuration.ORIENTATION_PORTRAIT");
+            //Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
