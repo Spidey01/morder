@@ -19,11 +19,11 @@ package com.spidey01.morder.android.browser;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,12 +40,15 @@ import com.spidey01.morder.android.ui.ActionBarDrawerToggle;
 
 public class BrowserActivity
     extends Activity
+    implements MorderWebObserver
 {
     private static final String TAG = "BrowserActivity";
 
     private DrawerItemClickListener mDrawerListener = new DrawerItemClickListener();
 
     private MorderWebView mWebView;
+
+    private Menu mMenu;
 
     private ShareActionProvider mShareActionProvider;
 
@@ -63,7 +66,7 @@ public class BrowserActivity
 
         mWebView = (MorderWebView)findViewById(R.id.webview);
         mWebView.setup(PreferenceManager.getDefaultSharedPreferences(this));
-        //mWebView.loadUrl(mWebView.getHomePage());
+        mWebView.setObserver(this);
         Intent intent = getIntent();
         if (intent.getData() == null) {
             Log.d(TAG, "No intent: load home page");
@@ -218,6 +221,10 @@ public class BrowserActivity
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_browser_activity_actions, menu);
+        mMenu = menu;
+
+        menu.findItem(R.id.action_back).setEnabled(mWebView.canGoBack());
+        menu.findItem(R.id.action_forward).setEnabled(mWebView.canGoForward());
 
 
         MenuItem shareItem = menu.findItem(R.id.action_share);
@@ -231,4 +238,22 @@ public class BrowserActivity
     }
 
 
+    @Override
+    public void onPageStarted(MorderWebView view, String url, Bitmap favicon) {
+        Log.v(TAG, "onPageStarted()");
+        if (mMenu != null) {
+            mMenu.findItem(R.id.action_back).setEnabled(mWebView.canGoBack());
+            Log.d(TAG, "action_back: "+ mMenu.findItem(R.id.action_back).isEnabled());
+        }
+    }
+
+
+    @Override
+    public void onPageFinished(MorderWebView view, String url) {
+        Log.v(TAG, "onPageFinished()");
+        if (mMenu != null) {
+            mMenu.findItem(R.id.action_forward).setEnabled(mWebView.canGoForward());
+            Log.d(TAG, "action_forward: "+ mMenu.findItem(R.id.action_forward).isEnabled());
+        }
+    }
 }

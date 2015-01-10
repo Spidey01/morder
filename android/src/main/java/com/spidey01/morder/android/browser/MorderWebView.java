@@ -39,6 +39,8 @@ public class MorderWebView
 
     private MorderWebViewClient mWebViewClient = new MorderWebViewClient();
 
+    private MorderWebObserver mObserver;
+
 
     public MorderWebView(Context context) {
         super(context);
@@ -61,6 +63,17 @@ public class MorderWebView
     }
 
 
+    public void setObserver(MorderWebObserver observer) {
+        mObserver = observer;
+        mWebViewClient.setObserver(mObserver);
+    }
+
+
+    public MorderWebObserver getObserver() {
+        return mObserver;
+    }
+
+
     public String getHomePage() {
         return mHomePage;
     }
@@ -76,6 +89,7 @@ public class MorderWebView
         Log.i(TAG, "disableJavaScript()");
         getSettings().setJavaScriptEnabled(false);
     }
+
 
     /*
      * This code needs major clean up.

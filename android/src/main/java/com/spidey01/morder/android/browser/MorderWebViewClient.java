@@ -16,6 +16,8 @@
 
 package com.spidey01.morder.android.browser;
 
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -27,6 +29,21 @@ import android.webkit.WebViewClient;
 public class MorderWebViewClient
     extends WebViewClient
 {
+    private static final String TAG = "MorderWebViewClient";
+
+    private MorderWebObserver mObserver;
+
+
+    public void setObserver(MorderWebObserver observer) {
+        mObserver = observer;
+    }
+
+
+    public MorderWebObserver getObserver() {
+        return mObserver;
+    }
+
+
     /**
      * Give the host application a chance to take over the control when a new
      * url is about to be loaded in the current WebView. If WebViewClient is not
@@ -46,4 +63,43 @@ public class MorderWebViewClient
         //return super.shouldOverrideUrlLoading(view, url);
         return false;
     }
+
+
+    /** Notify the host application that a page has started loading.
+     *
+     *  This method is called once for each main frame load so a page with
+     * iframes or framesets will call onPageStarted one time for the main
+     * frame. This also means that onPageStarted will not be called when the
+     * contents of an embedded frame changes, i.e. clicking a link whose target
+     * is an iframe.
+     *
+     * @param view The WebView that is initiating the callback.
+     * @param url The url to be loaded.
+     * @param favicon The favicon for this page if it already exists in the database.
+     */
+    @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        super.onPageStarted(view, url, favicon);
+        Log.v(TAG, "onPageStarted(): url="+url);
+        mObserver.onPageStarted((MorderWebView)view, url, favicon);
+    }
+
+
+    /** Notify the host application that a page has finished loading.
+     *
+     * This method is called only for main frame. When onPageFinished() is
+     * called, the rendering picture may not be updated yet. To get the
+     * notification for the new Picture, use onNewPicture(WebView, Picture).
+     *
+     * @param view The WebView that is initiating the callback.
+     * @param url The url of the page.
+     */
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+        Log.v(TAG, "onPageStarted(): url="+url);
+        mObserver.onPageFinished((MorderWebView)view, url);
+    }
+
+
 }
