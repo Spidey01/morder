@@ -22,6 +22,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.Menu;
@@ -238,9 +239,27 @@ public class BrowserActivity
     }
 
 
+    private final Handler mUiHandler = new Handler();
+    private Runnable mPageLoadStopper = new Runnable() {
+        @Override public void run() {
+            Log.v(TAG, "mPageLoadStopper.run(): force stopping page load");
+android.widget.Toast.makeText(BrowserActivity.this, TAG+": mPageLoadStopper.run(): force stopping page load", 0).show();
+            mWebView.stopLoading();
+        }
+    };
+
     @Override
     public void onPageStarted(MorderWebView view, String url, Bitmap favicon) {
         Log.v(TAG, "onPageStarted()");
+
+android.widget.Toast.makeText(this, TAG+": onPageStarted(): mWebView.getPageTimeout() => " + mWebView.getPageTimeout() , 0).show();
+        int pageTimeout = mWebView.getPageTimeout();
+        if (pageTimeout != MorderWebView.PAGE_TIMEOUT_NEVER) {
+            Log.v(TAG, "Setting page timeout.");
+android.widget.Toast.makeText(this, TAG+": onPageStarted(): setting page timeout", 0).show();
+            mUiHandler.postDelayed(mPageLoadStopper, pageTimeout /* seconds */ * 1000);
+        }
+
         if (mMenu != null) {
             mMenu.findItem(R.id.action_back).setEnabled(mWebView.canGoBack());
             Log.d(TAG, "action_back: "+ mMenu.findItem(R.id.action_back).isEnabled());
@@ -255,5 +274,18 @@ public class BrowserActivity
             mMenu.findItem(R.id.action_forward).setEnabled(mWebView.canGoForward());
             Log.d(TAG, "action_forward: "+ mMenu.findItem(R.id.action_forward).isEnabled());
         }
+
+
+        if (mWebView.getPageTimeout() != MorderWebView.PAGE_TIMEOUT_NEVER) {
+            Log.v(TAG, "Clearing page timeout.");
+android.widget.Toast.makeText(this, TAG+": onPageStarted(): clearing page timeout", 0).show();
+            mUiHandler.removeCallbacks(mPageLoadStopper);
+        }
     }
+
+
 }
+
+// FIXME: mWebView.getPageTimeout() is stale if changed in settings.
+//        ditto for UA change :(.
+//

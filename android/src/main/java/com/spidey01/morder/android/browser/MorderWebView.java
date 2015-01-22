@@ -35,6 +35,11 @@ public class MorderWebView
 {
     private static final String TAG = "MorderWebView";
 
+    /** Value used to indicate that page loads should never timeout. */
+    public static final int PAGE_TIMEOUT_NEVER = -1;
+
+    private int mPageTimeout;
+
     private String mHomePage;
 
     private MorderWebViewClient mWebViewClient = new MorderWebViewClient();
@@ -74,6 +79,11 @@ public class MorderWebView
     }
 
 
+    public int getPageTimeout() {
+        return mPageTimeout;
+    }
+
+
     public String getHomePage() {
         return mHomePage;
     }
@@ -98,6 +108,7 @@ public class MorderWebView
     private static final String PREF_NEW_TAB_PAGE = "pref_newTabPage_key";
     private static final String PREF_ENABLE_JAVASCRIPT = "pref_javascript_key";
     private static final String PREF_USER_AGENT_MODE = "pref_userAgentMode_key";
+    private static final String PREF_PAGE_TIMEOUT = "pref_pageTimeout_key";
 
 
     private final void assertPreferences() {
@@ -110,6 +121,9 @@ public class MorderWebView
 
         p = res.getString(R.string.pref_javascript_key);
         assert PREF_ENABLE_JAVASCRIPT.equals(p) : msg;
+
+        p = res.getString(R.string.pref_pageTimeout_key);
+        assert PREF_PAGE_TIMEOUT.equals(p) : msg;
     }
 
 
@@ -198,6 +212,28 @@ public class MorderWebView
         } else {
             disableJavaScript();
         }
+
+        ///
+        String pageTimeout = prefs.getString(PREF_PAGE_TIMEOUT,
+                res.getString(R.string.pref_pageTimeout_default));
+        Log.d(TAG, "setup(): pageTimeout=" + pageTimeout);
+android.widget.Toast.makeText(getContext(), "setup(): pageTimeout=" + pageTimeout, 0).show();
+        if (pageTimeout.equals("Never")) {
+            mPageTimeout = PAGE_TIMEOUT_NEVER;
+        } else {
+            try {
+                mPageTimeout = Integer.valueOf(pageTimeout.substring(0, pageTimeout.indexOf(" ")));
+            } catch (NumberFormatException ex) {
+                Log.e(TAG, "setup(): Unable to set (int)mPageTimeout from " + pageTimeout);
+android.widget.Toast.makeText(getContext(),
+"setup(): Unable to set (int)mPageTimeout from " + pageTimeout
+, 0).show();
+            }
+        }
+
+
+
+
     }
 
 

@@ -33,8 +33,12 @@
     <string name="pref_javascript_title">Enable JavaScript</string>
     <string name="pref_javascript_summeryoff">Websites cannot use JavaScript. You\'ve broken the Internet!</string>
     <string name="pref_javascript_summeryon">Websites can use JavaScript. Dynamic web time, script time!</string>
-    <string name="title_activity_about">AboutActivity</string>
+    <string name="pref_pageTimeout_key">pref_pageTimeout_key</string>
+    <string name="pref_pageTimeout_title">Page Timeout</string>
+    <string name="pref_pageTimeout_summery">Web pages taking longer than this to finish loading will be stopped.</string>
+    <string name="pref_pageTimeout_default">Never</string>
 
     <!-- strings for AboutActivity -->
+    <string name="title_activity_about">AboutActivity</string>
 
 </resources>

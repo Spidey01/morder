@@ -32,4 +32,12 @@
     <item>Desktop</item>
   </string-array>
 
+  <!-- Used to stop page load on a timeout. -->
+  <string-array name="pref_pageTimeout_array">
+    <item>@string/pref_pageTimeout_default</item>
+    <item>5 Seconds</item>
+    <item>15 Seconds</item>
+    <item>45 Seconds</item>
+  </string-array>
+
 </resources>
