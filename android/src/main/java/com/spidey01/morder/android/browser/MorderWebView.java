@@ -140,7 +140,21 @@ public class MorderWebView
                 disableJavaScript();
             }
         }
-        // Dynamic UA updating?
+        else if (key.equals(PREF_USER_AGENT_MODE)) {
+            Log.d(TAG, "Do we want dynamic UA updating?");
+        }
+        else if (key.equals(PREF_PAGE_TIMEOUT)) {
+            try {
+                mPageTimeout = parsePageTimeout(
+                        sharedPreferences.getString(
+                            key,
+                            getResources().getString(R.string.pref_pageTimeout_default)
+                        )
+                );
+            } catch (NumberFormatException ex) {
+                Log.e(TAG, "onSharedPreferenceChanged(): Couldn't update mPageTimeout:", ex);
+            }
+        }
     }
 
 
@@ -213,27 +227,26 @@ public class MorderWebView
             disableJavaScript();
         }
 
-        ///
         String pageTimeout = prefs.getString(PREF_PAGE_TIMEOUT,
                 res.getString(R.string.pref_pageTimeout_default));
         Log.d(TAG, "setup(): pageTimeout=" + pageTimeout);
-android.widget.Toast.makeText(getContext(), "setup(): pageTimeout=" + pageTimeout, 0).show();
-        if (pageTimeout.equals("Never")) {
-            mPageTimeout = PAGE_TIMEOUT_NEVER;
-        } else {
-            try {
-                mPageTimeout = Integer.valueOf(pageTimeout.substring(0, pageTimeout.indexOf(" ")));
-            } catch (NumberFormatException ex) {
-                Log.e(TAG, "setup(): Unable to set (int)mPageTimeout from " + pageTimeout);
-android.widget.Toast.makeText(getContext(),
-"setup(): Unable to set (int)mPageTimeout from " + pageTimeout
-, 0).show();
-            }
+        try {
+            mPageTimeout = parsePageTimeout(pageTimeout);
+        } catch (NumberFormatException ex) {
+            Log.e(TAG, "setup(): Unable to set (int)mPageTimeout from " + pageTimeout, ex);
         }
 
+    }
 
 
-
+    private int parsePageTimeout(String preference_value)
+        throws NumberFormatException
+    {
+        if (preference_value.equals("Never")) {
+            return PAGE_TIMEOUT_NEVER;
+        } else {
+            return Integer.valueOf(preference_value.substring(0, preference_value.indexOf(" ")));
+        }
     }
 
 

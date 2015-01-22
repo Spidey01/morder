@@ -286,6 +286,3 @@ android.widget.Toast.makeText(this, TAG+": onPageStarted(): clearing page timeou
 
 }
 
-// FIXME: mWebView.getPageTimeout() is stale if changed in settings.
-//        ditto for UA change :(.
-//
