@@ -175,10 +175,8 @@ public class BrowserActivity
          */
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Log.d(TAG, "onConfigurationChanged(): Configuration.ORIENTATION_LANDSCAPE");
-            //Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             Log.d(TAG, "onConfigurationChanged(): Configuration.ORIENTATION_PORTRAIT");
-            //Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -243,7 +241,6 @@ public class BrowserActivity
     private Runnable mPageLoadStopper = new Runnable() {
         @Override public void run() {
             Log.v(TAG, "mPageLoadStopper.run(): force stopping page load");
-android.widget.Toast.makeText(BrowserActivity.this, TAG+": mPageLoadStopper.run(): force stopping page load", 0).show();
             mWebView.stopLoading();
         }
     };
@@ -252,11 +249,9 @@ android.widget.Toast.makeText(BrowserActivity.this, TAG+": mPageLoadStopper.run(
     public void onPageStarted(MorderWebView view, String url, Bitmap favicon) {
         Log.v(TAG, "onPageStarted()");
 
-android.widget.Toast.makeText(this, TAG+": onPageStarted(): mWebView.getPageTimeout() => " + mWebView.getPageTimeout() , 0).show();
         int pageTimeout = mWebView.getPageTimeout();
         if (pageTimeout != MorderWebView.PAGE_TIMEOUT_NEVER) {
             Log.v(TAG, "Setting page timeout.");
-android.widget.Toast.makeText(this, TAG+": onPageStarted(): setting page timeout", 0).show();
             mUiHandler.postDelayed(mPageLoadStopper, pageTimeout /* seconds */ * 1000);
         }
 
@@ -278,7 +273,6 @@ android.widget.Toast.makeText(this, TAG+": onPageStarted(): setting page timeout
 
         if (mWebView.getPageTimeout() != MorderWebView.PAGE_TIMEOUT_NEVER) {
             Log.v(TAG, "Clearing page timeout.");
-android.widget.Toast.makeText(this, TAG+": onPageStarted(): clearing page timeout", 0).show();
             mUiHandler.removeCallbacks(mPageLoadStopper);
         }
     }
