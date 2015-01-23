@@ -226,10 +226,6 @@ public class BrowserActivity
 
         MenuItem shareItem = menu.findItem(R.id.action_share);
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
-        // Set the initial default.
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setData(Uri.parse(mWebView.getUrl()));
-        mShareActionProvider.setShareIntent(intent);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -256,6 +252,20 @@ public class BrowserActivity
         if (mMenu != null) {
             mMenu.findItem(R.id.action_back).setEnabled(mWebView.canGoBack());
             Log.d(TAG, "action_back: "+ mMenu.findItem(R.id.action_back).isEnabled());
+        }
+
+        if (mShareActionProvider != null) {
+            Log.v(TAG, "Updating Intent for mShareActionProvider.");
+            /*
+             * We don't really want to do all this every page start.
+             * We should find a way to do it dynamically via callback or a custom impl of ShareActionProvider that has a reference to mWebView.
+             */
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, url);
+            intent.putExtra(Intent.EXTRA_SUBJECT, view.getTitle());
+            //intent.putExtra(???, favicon);
+            mShareActionProvider.setShareIntent(intent);
         }
     }
 
