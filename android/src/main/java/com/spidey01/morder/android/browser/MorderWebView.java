@@ -74,7 +74,7 @@ public class MorderWebView
     }
 
 
-    private static final void initStaticFields() {
+    private final void initStaticFields() {
         if (SYSTEM_WEBVIEW_UA == null) {
             SYSTEM_WEBVIEW_UA = getSettings().getUserAgentString();
         }
@@ -178,6 +178,8 @@ public class MorderWebView
 
     public void setup(SharedPreferences prefs) {
         Log.d(TAG, "setup()");
+        // Do we need to unregister this view later?
+        prefs.registerOnSharedPreferenceChangeListener(this);
 
         Resources res = getResources();
 

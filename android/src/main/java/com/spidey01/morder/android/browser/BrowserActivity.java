@@ -103,7 +103,6 @@ public class BrowserActivity
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume()");
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(mWebView);
     }
 
 
@@ -111,7 +110,6 @@ public class BrowserActivity
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause()");
-        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mWebView);
     }
 
 
