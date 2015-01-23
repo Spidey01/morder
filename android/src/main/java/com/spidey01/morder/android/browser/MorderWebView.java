@@ -38,6 +38,9 @@ public class MorderWebView
     /** Value used to indicate that page loads should never timeout. */
     public static final int PAGE_TIMEOUT_NEVER = -1;
 
+    /** Default UA of the systems WebView. */
+    private static String SYSTEM_WEBVIEW_UA;
+
     private int mPageTimeout;
 
     private String mHomePage;
@@ -51,6 +54,7 @@ public class MorderWebView
         super(context);
         assertPreferences();
         setWebViewClient(mWebViewClient);
+        initStaticFields();
     }
 
 
@@ -58,6 +62,7 @@ public class MorderWebView
         super(context, attrs);
         assertPreferences();
         setWebViewClient(mWebViewClient);
+        initStaticFields();
     }
 
 
@@ -65,6 +70,14 @@ public class MorderWebView
         super(context, attrs, defStyleAttr);
         assertPreferences();
         setWebViewClient(mWebViewClient);
+        initStaticFields();
+    }
+
+
+    private static final void initStaticFields() {
+        if (SYSTEM_WEBVIEW_UA == null) {
+            SYSTEM_WEBVIEW_UA = getSettings().getUserAgentString();
+        }
     }
 
 
@@ -142,6 +155,11 @@ public class MorderWebView
         }
         else if (key.equals(PREF_USER_AGENT_MODE)) {
             Log.d(TAG, "Do we want dynamic UA updating?");
+            getSettings().setUserAgentString(parseUserAgentMode(
+                sharedPreferences.getString(PREF_USER_AGENT_MODE,
+                    getResources().getString(R.string.pref_userAgentMode_default)
+                )
+            ));
         }
         else if (key.equals(PREF_PAGE_TIMEOUT)) {
             try {
@@ -170,55 +188,8 @@ public class MorderWebView
         String userAgentMode = prefs.getString(PREF_USER_AGENT_MODE,
                 res.getString(R.string.pref_userAgentMode_default));
         Log.d(TAG, "setup(): userAgentMode=" + userAgentMode);
-        WebSettings settings = getSettings();
-        String baseUA = settings.getUserAgentString();
-        final String morderElement = " Morder/0";
-        switch (userAgentMode) {
-            case "Smart":
-                /*
-                 * WebView already has the desired behaviour of stuff in "Mobile"
-                 * on phone and leave it be otherwise. So just update your UA.
-                 */
-                settings.setUserAgentString(baseUA + morderElement);
-                break;
-            case "Phone":
-                if (baseUA.matches("Mobile")) {
-                    settings.setUserAgentString(baseUA + morderElement);
-                } else {
-                    /* Technically we should find "Chrome/ver Safari/ver"
-                     * and insert Mobile in between.
-                     *
-                     * This should be sufficent though.
-                     */
-                    settings.setUserAgentString(baseUA + " Mobile" + morderElement);
-                }
-                break;
-            case "Tablet":
-                settings.setUserAgentString(baseUA.replace(" Mobile ", " ") + morderElement);
-                break;
-            case "Desktop":
-                StringBuilder buffer = new StringBuilder(baseUA.length());
-                boolean inParen = false;
-                for (String word : baseUA.split(" ")) {
-                    if (word.startsWith("(Linux;")) {
-                        inParen = true;
-                        buffer.append("(X11; Linux x86_64) ");
-                    } else if (inParen) {
-                        if (word.contains(")")) {
-                            inParen = false;
-                        }
-                    } else {
-                        buffer.append(word);
-                        buffer.append(" ");
-                    }
-                }
-                settings.setUserAgentString(buffer.toString().replace(" Mobile ", " ").trim()+ morderElement);
-                break;
-            default:
-                Log.e(TAG, "setup(): Unknown user agent mode " + userAgentMode);
-                break;
-        }
-        Log.i(TAG, "setup(): user agent => " + settings.getUserAgentString());
+        getSettings().setUserAgentString(parseUserAgentMode(userAgentMode));
+        Log.i(TAG, "setup(): user agent => " + getSettings().getUserAgentString());
 
         final boolean defaultJS = res.getBoolean(R.bool.pref_javascript_default);
         if (prefs.getBoolean(PREF_ENABLE_JAVASCRIPT, defaultJS)) {
@@ -246,6 +217,54 @@ public class MorderWebView
             return PAGE_TIMEOUT_NEVER;
         } else {
             return Integer.valueOf(preference_value.substring(0, preference_value.indexOf(" ")));
+        }
+    }
+
+
+    private String parseUserAgentMode(String mode) {
+        assert SYSTEM_WEBVIEW_UA != null;
+
+        final String morderElement = " Morder/0";
+        switch (mode) {
+            case "Smart":
+                /*
+                 * WebView already has the desired behaviour of stuff in "Mobile"
+                 * on phone and leave it be otherwise. So just update your UA.
+                 */
+                return SYSTEM_WEBVIEW_UA + morderElement;
+            case "Phone":
+                if (SYSTEM_WEBVIEW_UA.matches("Mobile")) {
+                    return SYSTEM_WEBVIEW_UA + morderElement;
+                } else {
+                    /* Technically we should find "Chrome/ver Safari/ver"
+                     * and insert Mobile in between.
+                     *
+                     * This should be sufficent though.
+                     */
+                    return SYSTEM_WEBVIEW_UA + " Mobile" + morderElement;
+                }
+            case "Tablet":
+                return SYSTEM_WEBVIEW_UA.replace(" Mobile ", " ") + morderElement;
+            case "Desktop":
+                StringBuilder buffer = new StringBuilder(SYSTEM_WEBVIEW_UA.length());
+                boolean inParen = false;
+                for (String word : SYSTEM_WEBVIEW_UA.split(" ")) {
+                    if (word.startsWith("(Linux;")) {
+                        inParen = true;
+                        buffer.append("(X11; Linux x86_64) ");
+                    } else if (inParen) {
+                        if (word.contains(")")) {
+                            inParen = false;
+                        }
+                    } else {
+                        buffer.append(word);
+                        buffer.append(" ");
+                    }
+                }
+                return buffer.toString().replace(" Mobile ", " ").trim()+ morderElement;
+            default:
+                Log.e(TAG, "setup(): Unknown user agent mode " + mode);
+                throw new IllegalArgumentException("Unknown user agent mode " + mode);
         }
     }
 
