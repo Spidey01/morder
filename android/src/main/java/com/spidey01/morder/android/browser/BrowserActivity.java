@@ -286,5 +286,12 @@ public class BrowserActivity
     }
 
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        // We don't have tabs yet so just push it into the history and load the new page.
+        mWebView.loadUrl(intent.getData().toString());
+
+        super.onNewIntent(intent);
+    }
 }
 
