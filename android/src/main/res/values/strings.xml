@@ -12,6 +12,7 @@
     <string name="drawer_close">Close navigation drawer</string>
 
     <!-- strings for BrowserActivity -->
+    <string name="action_home">Go home</string>
     <string name="action_back">Go back</string>
     <string name="action_forward">Go forward</string>
     <string name="action_share">Share</string>

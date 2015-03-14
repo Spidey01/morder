@@ -191,6 +191,9 @@ public class BrowserActivity
         // Handle your other action bar items...
 
         switch(item.getItemId()) {
+            case R.id.action_home:
+                mWebView.loadUrl(mWebView.getHomePage());
+                break;
             case R.id.action_back:
                 if (mWebView.canGoBack()) {
                     mWebView.goBack();
