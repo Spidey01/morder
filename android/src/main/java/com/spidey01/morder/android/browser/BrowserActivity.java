@@ -203,6 +203,7 @@ public class BrowserActivity
                 if (mWebView.canGoForward()) {
                     mWebView.goForward();
                 }
+                break;
             /*
             default:
                 Log.e(TAG, "onOptionsItemSelected(): unknown item:" + item.toString());
