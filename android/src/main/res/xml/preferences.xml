@@ -40,6 +40,13 @@
 
     </PreferenceCategory>
 
+    <CheckBoxPreference
+        android:key="@string/pref_showZoomControls_key"
+        android:title="@string/pref_showZoomControls_title"
+        android:defaultValue="@bool/pref_showZoomControls_default"
+        android:summaryOff="@string/pref_showZoomControls_summeryoff"
+        android:summaryOn="@string/pref_showZoomControls_summeryon" />
+
     <!-- Advanced settings -->
     <PreferenceCategory
         android:key="@string/pref_advanced_key"

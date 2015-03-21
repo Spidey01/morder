@@ -28,6 +28,10 @@
     <string name="pref_userAgentMode_title">User Agent Mode</string>
     <string name="pref_userAgentMode_summery">Device type to report in user agent string.</string>
     <string name="pref_userAgentMode_default">Smart</string>
+    <string name="pref_showZoomControls_key">pref_showZoomControls_key</string>
+    <string name="pref_showZoomControls_title">Show zoom controls</string>
+    <string name="pref_showZoomControls_summeryoff">Zoom controls will not be shown.</string>
+    <string name="pref_showZoomControls_summeryon">Zoom controls will be shown.</string>
     <string name="pref_advanced_key">pref_advanced_key</string>
     <string name="pref_advanced_title">Advanced</string>
     <string name="pref_javascript_key">pref_javascript_key</string>

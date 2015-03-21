@@ -121,6 +121,7 @@ public class MorderWebView
     private static final String PREF_ENABLE_JAVASCRIPT = "pref_javascript_key";
     private static final String PREF_USER_AGENT_MODE = "pref_userAgentMode_key";
     private static final String PREF_PAGE_TIMEOUT = "pref_pageTimeout_key";
+    private static final String PREF_SHOW_ZOOM_CONTROLS = "pref_showZoomControls_key";
 
 
     private final void assertPreferences() {
@@ -136,6 +137,9 @@ public class MorderWebView
 
         p = res.getString(R.string.pref_pageTimeout_key);
         assert PREF_PAGE_TIMEOUT.equals(p) : msg;
+
+        p = res.getString(R.string.pref_showZoomControls_key);
+        assert PREF_SHOW_ZOOM_CONTROLS.equals(p) : msg;
     }
 
 
@@ -171,6 +175,15 @@ public class MorderWebView
             } catch (NumberFormatException ex) {
                 Log.e(TAG, "onSharedPreferenceChanged(): Couldn't update mPageTimeout:", ex);
             }
+        }
+        else if (key.equals(PREF_SHOW_ZOOM_CONTROLS)) {
+            Log.d(TAG, "Zoom controls toggled.");
+            getSettings().setDisplayZoomControls(
+                    sharedPreferences.getBoolean(
+                            key,
+                            getResources().getBoolean(R.bool.pref_showZoomControls_default)
+                    )
+            );
         }
     }
 
@@ -208,8 +221,11 @@ public class MorderWebView
             Log.e(TAG, "setup(): Unable to set (int)mPageTimeout from " + pageTimeout, ex);
         }
 
+        final boolean defaultShowZoomControls  = res.getBoolean(R.bool.pref_showZoomControls_default);
         getSettings().setSupportZoom(true);
-        getSettings().setDisplayZoomControls(false);
+        getSettings().setDisplayZoomControls(defaultShowZoomControls);
+        // Enables pinch to zoom.
+        // And the zoom buttons if the above is true.
         getSettings().setBuiltInZoomControls(true);
     }
 
