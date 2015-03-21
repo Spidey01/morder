@@ -21,7 +21,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import com.spidey01.morder.android.R;
 
@@ -209,6 +208,9 @@ public class MorderWebView
             Log.e(TAG, "setup(): Unable to set (int)mPageTimeout from " + pageTimeout, ex);
         }
 
+        getSettings().setSupportZoom(true);
+        getSettings().setDisplayZoomControls(false);
+        getSettings().setBuiltInZoomControls(true);
     }
 
 
