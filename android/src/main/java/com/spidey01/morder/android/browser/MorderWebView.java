@@ -178,12 +178,16 @@ public class MorderWebView
         }
         else if (key.equals(PREF_SHOW_ZOOM_CONTROLS)) {
             Log.d(TAG, "Zoom controls toggled.");
+            getSettings().setSupportZoom(true);
             getSettings().setDisplayZoomControls(
                     sharedPreferences.getBoolean(
                             key,
                             getResources().getBoolean(R.bool.pref_showZoomControls_default)
                     )
             );
+            // Enables pinch to zoom.
+            // And the zoom buttons if the above is true.
+            getSettings().setBuiltInZoomControls(true);
         }
     }
 
@@ -193,40 +197,19 @@ public class MorderWebView
         // Do we need to unregister this view later?
         prefs.registerOnSharedPreferenceChangeListener(this);
 
-        Resources res = getResources();
 
-        final String defaultHomePage = res.getString(R.string.pref_newTabPage_key);
-        mHomePage = prefs.getString(PREF_NEW_TAB_PAGE, defaultHomePage);
+        onSharedPreferenceChanged(prefs, PREF_NEW_TAB_PAGE );
         Log.d(TAG, "default home page is: " + mHomePage);
 
-        String userAgentMode = prefs.getString(PREF_USER_AGENT_MODE,
-                res.getString(R.string.pref_userAgentMode_default));
-        Log.d(TAG, "setup(): userAgentMode=" + userAgentMode);
-        getSettings().setUserAgentString(parseUserAgentMode(userAgentMode));
+        onSharedPreferenceChanged(prefs, PREF_USER_AGENT_MODE);
         Log.i(TAG, "setup(): user agent => " + getSettings().getUserAgentString());
 
-        final boolean defaultJS = res.getBoolean(R.bool.pref_javascript_default);
-        if (prefs.getBoolean(PREF_ENABLE_JAVASCRIPT, defaultJS)) {
-            enableJavaScript();
-        } else {
-            disableJavaScript();
-        }
+        onSharedPreferenceChanged(prefs, PREF_ENABLE_JAVASCRIPT);
 
-        String pageTimeout = prefs.getString(PREF_PAGE_TIMEOUT,
-                res.getString(R.string.pref_pageTimeout_default));
-        Log.d(TAG, "setup(): pageTimeout=" + pageTimeout);
-        try {
-            mPageTimeout = parsePageTimeout(pageTimeout);
-        } catch (NumberFormatException ex) {
-            Log.e(TAG, "setup(): Unable to set (int)mPageTimeout from " + pageTimeout, ex);
-        }
+        onSharedPreferenceChanged(prefs, PREF_PAGE_TIMEOUT);
+        Log.d(TAG, "setup(): pageTimeout=" + mPageTimeout);
 
-        final boolean defaultShowZoomControls  = res.getBoolean(R.bool.pref_showZoomControls_default);
-        getSettings().setSupportZoom(true);
-        getSettings().setDisplayZoomControls(defaultShowZoomControls);
-        // Enables pinch to zoom.
-        // And the zoom buttons if the above is true.
-        getSettings().setBuiltInZoomControls(true);
+        onSharedPreferenceChanged(prefs, PREF_SHOW_ZOOM_CONTROLS);
     }
 
 
