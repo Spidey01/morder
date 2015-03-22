@@ -34,6 +34,8 @@ import android.view.KeyEvent;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ShareActionProvider;
+import android.widget.Toast;
+import com.spidey01.morder.android.BuildConfig;
 import com.spidey01.morder.android.ui.DrawerItemClickListener;
 import com.spidey01.morder.android.R;
 import com.spidey01.morder.android.ui.ActionBarDrawerToggle;
@@ -88,7 +90,7 @@ public class BrowserActivity
         DrawerLayout layout = (DrawerLayout)findViewById(R.id.drawer_layout);
         ListView view = (ListView)findViewById(R.id.drawer_view);
         ArrayAdapter<String> adapter =
-            new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, activities);
+            new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, activities);
 
         view.setAdapter(adapter);
         view.setOnItemClickListener(mDrawerListener);
@@ -301,5 +303,80 @@ public class BrowserActivity
 
         super.onNewIntent(intent);
     }
-}
 
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+    }
+
+
+    @Override
+    public void onTrimMemory(int level) {
+
+        /*
+         * We've gone into the LRU list.
+         * Clean up resources that can efficiently and quickly be re-built on user return.
+         */
+        if (level >= TRIM_MEMORY_BACKGROUND) {
+            Log.w(TAG, "onTrimMemory(TRIM_MEMORY_BACKGROUND)");
+        }
+
+        /*
+         * We're nearing the end of the LRU list.
+         * If more memory isn't found soon, we are dead.
+         */
+        if (level >= TRIM_MEMORY_COMPLETE) {
+            Log.w(TAG, "onTrimMemory(TRIM_MEMORY_COMPLETE)");
+            // Same level as onLowMemory().
+            // I assume we can just do nothing and let the OS
+            // call our onLowMemory().
+        }
+
+        /*
+         * We're around the middle of the LRU list.
+         * Freeing up memory will help the world.
+         */
+        if (level >= TRIM_MEMORY_MODERATE) {
+            Log.w(TAG, "onTrimMemory(TRIM_MEMORY_MODERATE)");
+        }
+
+        /*
+         * We're critical on memory.
+         * Please for the love of users, free some memory!
+         */
+        if (level >= TRIM_MEMORY_RUNNING_CRITICAL) {
+            Log.w(TAG, "onTrimMemory(TRIM_MEMORY_CRITICAL)");
+        }
+
+        /*
+         * We're getting low on memory.
+         * Be kind, be polite, trim some fat.
+         */
+        if (level >= TRIM_MEMORY_RUNNING_LOW) {
+            Log.w(TAG, "onTrimMemory(TRIM_MEMORY_LOW)");
+        }
+
+        /*
+         * We're moderate on memory.
+         * Be kind, be polite, trim some fat.
+         */
+        if (level >= TRIM_MEMORY_RUNNING_MODERATE) {
+            Log.w(TAG, "onTrimMemory(TRIM_MEMORY_MODERATE)");
+        }
+
+        /*
+         * We're no longer showing UI.
+         * Clean up UI stuff.
+         */
+        if (level >= TRIM_MEMORY_UI_HIDDEN) {
+            Log.w(TAG, "onTrimMemory(TRIM_MEMORY_UI_HIDDEN)");
+        }
+
+        if (BuildConfig.DEBUG) {
+            Toast.makeText(this, "Mörder onTrimMemory(): " + level, Toast.LENGTH_LONG);
+        }
+
+        super.onTrimMemory(level);
+    }
+}

@@ -146,48 +146,54 @@ public class MorderWebView
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Log.d(TAG, "onSharedPreferenceChanged(): key=" + key);
 
-        if (key.equals(PREF_NEW_TAB_PAGE)) {
-            mHomePage = sharedPreferences.getString(key, getResources().getString(R.string.pref_newTabPage_default));
-        }
-        else if (key.equals(PREF_ENABLE_JAVASCRIPT)) {
-            if (sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_javascript_default))) {
-                enableJavaScript();
-            } else {
-                disableJavaScript();
+        switch (key) {
+            case PREF_NEW_TAB_PAGE:
+                mHomePage = sharedPreferences.getString(key, getResources().getString(R.string.pref_newTabPage_default));
+                break;
+            case PREF_ENABLE_JAVASCRIPT: {
+                if (sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_javascript_default))) {
+                    enableJavaScript();
+                } else {
+                    disableJavaScript();
+                }
+                break;
             }
-        }
-        else if (key.equals(PREF_USER_AGENT_MODE)) {
-            Log.d(TAG, "Do we want dynamic UA updating?");
-            getSettings().setUserAgentString(parseUserAgentMode(
-                sharedPreferences.getString(PREF_USER_AGENT_MODE,
-                    getResources().getString(R.string.pref_userAgentMode_default)
-                )
-            ));
-        }
-        else if (key.equals(PREF_PAGE_TIMEOUT)) {
-            try {
-                mPageTimeout = parsePageTimeout(
-                        sharedPreferences.getString(
-                            key,
-                            getResources().getString(R.string.pref_pageTimeout_default)
+            case PREF_USER_AGENT_MODE: {
+                Log.d(TAG, "Do we want dynamic UA updating?");
+                getSettings().setUserAgentString(parseUserAgentMode(
+                        sharedPreferences.getString(PREF_USER_AGENT_MODE,
+                                getResources().getString(R.string.pref_userAgentMode_default)
+                        )
+                ));
+                break;
+            }
+            case PREF_PAGE_TIMEOUT: {
+                try {
+                    mPageTimeout = parsePageTimeout(
+                            sharedPreferences.getString(
+                                    key,
+                                    getResources().getString(R.string.pref_pageTimeout_default)
+                            )
+                    );
+                } catch (NumberFormatException ex) {
+                    Log.e(TAG, "onSharedPreferenceChanged(): Couldn't update mPageTimeout:", ex);
+                }
+                break;
+            }
+            case PREF_SHOW_ZOOM_CONTROLS: {
+                Log.d(TAG, "Zoom controls toggled.");
+                getSettings().setSupportZoom(true);
+                getSettings().setDisplayZoomControls(
+                        sharedPreferences.getBoolean(
+                                key,
+                                getResources().getBoolean(R.bool.pref_showZoomControls_default)
                         )
                 );
-            } catch (NumberFormatException ex) {
-                Log.e(TAG, "onSharedPreferenceChanged(): Couldn't update mPageTimeout:", ex);
+                // Enables pinch to zoom.
+                // And the zoom buttons if the above is true.
+                getSettings().setBuiltInZoomControls(true);
+                break;
             }
-        }
-        else if (key.equals(PREF_SHOW_ZOOM_CONTROLS)) {
-            Log.d(TAG, "Zoom controls toggled.");
-            getSettings().setSupportZoom(true);
-            getSettings().setDisplayZoomControls(
-                    sharedPreferences.getBoolean(
-                            key,
-                            getResources().getBoolean(R.bool.pref_showZoomControls_default)
-                    )
-            );
-            // Enables pinch to zoom.
-            // And the zoom buttons if the above is true.
-            getSettings().setBuiltInZoomControls(true);
         }
     }
 
