@@ -36,6 +36,7 @@ import android.widget.ListView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 import com.spidey01.morder.android.BuildConfig;
+import com.spidey01.morder.android.shortcuts.ShortcutManager;
 import com.spidey01.morder.android.ui.DrawerItemClickListener;
 import com.spidey01.morder.android.R;
 import com.spidey01.morder.android.ui.ActionBarDrawerToggle;
@@ -50,6 +51,7 @@ public class BrowserActivity
     private DrawerItemClickListener mDrawerListener = new DrawerItemClickListener();
 
     private MorderWebView mWebView;
+    private ShortcutManager mShortcuts;
 
     private Menu mMenu;
 
@@ -68,6 +70,8 @@ public class BrowserActivity
         enableDrawer();
 
         mWebView = (MorderWebView)findViewById(R.id.webview);
+        mShortcuts = new ShortcutManager(mWebView);
+
         mWebView.setup(PreferenceManager.getDefaultSharedPreferences(this));
         mWebView.setObserver(this);
         Intent intent = getIntent();
@@ -145,15 +149,7 @@ public class BrowserActivity
      */
     @Override
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
-        // Note: Android calls backspace DEL and delete FORWARD_DEL.
-        if ((keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_DEL)
-            && mWebView.canGoBack())
-        {
-            mWebView.goBack();
-            return true;
-        }
-
-        return super.onKeyDown(keyCode, event);
+        return mShortcuts.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 
 
