@@ -18,8 +18,11 @@ package com.spidey01.morder.android.browser;
 
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.view.InputEvent;
+import android.view.KeyEvent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import com.spidey01.morder.android.shortcuts.ShortcutManager;
 
 
 /** Custom WebViewClient to load content in our own web view.
@@ -32,6 +35,7 @@ public class MorderWebViewClient
     private static final String TAG = "MorderWebViewClient";
 
     private MorderWebObserver mObserver;
+    private ShortcutManager mShortcuts = new ShortcutManager();
 
 
     public void setObserver(MorderWebObserver observer) {
@@ -81,7 +85,7 @@ public class MorderWebViewClient
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
         super.onPageStarted(view, url, favicon);
         Log.v(TAG, "onPageStarted(): url="+url);
-        mObserver.onPageStarted((MorderWebView)view, url, favicon);
+        mObserver.onPageStarted((MorderWebView) view, url, favicon);
     }
 
 
@@ -97,9 +101,45 @@ public class MorderWebViewClient
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
-        Log.v(TAG, "onPageStarted(): url="+url);
-        mObserver.onPageFinished((MorderWebView)view, url);
+        Log.v(TAG, "onPageStarted(): url=" + url);
+        mObserver.onPageFinished((MorderWebView) view, url);
+    }
+
+
+/* FIXME: Lollipop
+    @Override
+    public void onUnhandledInputEvent(WebView view, InputEvent event) {
+        Log.e(TAG, "onUnhandledInputEvent()");
+        Log.d("XXX", event.toString());
+*/
+        /*
+         * Super handles this in Lollipop but docs say do it ourselves.
+         * So we do. We also call super anyway 'cuz Lollipop also does more.
+         */
+/*
+        if (event instanceof KeyEvent) {
+            onUnhandledKeyEvent(view, (KeyEvent)event);
+            return;
+        }
+        super.unHandledInputEvent(view, event);
+    }
+    */
+
+
+    @Override
+    public void onUnhandledKeyEvent(WebView view, KeyEvent event) {
+        Log.v(TAG, "onUnhandledKeyEvent()");
+        Log.v(TAG, "Action was "+event.getAction());
+        ShortcutManager.Shortcuts x = mShortcuts.isShortcut(event);
+        Log.v(TAG, "Shortcut was "+x.name());
+
+        if (event.getAction() == KeyEvent.ACTION_UP
+            && x != ShortcutManager.Shortcuts.NOT_A_SHORTCUT) {
+            Log.e(TAG, "Perform shortcut "+x.name());
+        }
+        else { Log.d("NOT", "a shortcut"); }
     }
 
 
 }
+

@@ -51,7 +51,6 @@ public class BrowserActivity
     private DrawerItemClickListener mDrawerListener = new DrawerItemClickListener();
 
     private MorderWebView mWebView;
-    private ShortcutManager mShortcuts;
 
     private Menu mMenu;
 
@@ -70,8 +69,6 @@ public class BrowserActivity
         enableDrawer();
 
         mWebView = (MorderWebView)findViewById(R.id.webview);
-        mShortcuts = new ShortcutManager(mWebView);
-
         mWebView.setup(PreferenceManager.getDefaultSharedPreferences(this));
         mWebView.setObserver(this);
         Intent intent = getIntent();
@@ -116,40 +113,6 @@ public class BrowserActivity
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause()");
-    }
-
-
-    /**
-     * Called when a key was pressed down and not handled by any of the views
-     * inside of the activity. So, for example, key presses while the cursor
-     * is inside a TextView will not trigger the event (unless it is a navigation
-     * to another object) because TextView handles its own key presses.
-     * <p/>
-     * <p>If the focused view didn't want this event, this method is called.
-     * <p/>
-     * <p>The default implementation takes care of {@link android.view.KeyEvent#KEYCODE_BACK}
-     * by calling {@link #onBackPressed()}, though the behavior varies based
-     * on the application compatibility mode: for
-     * {@link android.os.Build.VERSION_CODES#ECLAIR} or later applications,
-     * it will set up the dispatch to call {@link #onKeyUp} where the action
-     * will be performed; for earlier applications, it will perform the
-     * action immediately in on-down, as those versions of the platform
-     * behaved.
-     * <p/>
-     * <p>Other additional default key handling may be performed
-     * if configured with {@link #setDefaultKeyMode}.
-     *
-     * @param keyCode code for key.
-     * @param event event for key.
-     * @return Return <code>true</code> to prevent this event from being propagated
-     * further, or <code>false</code> to indicate that you have not handled
-     * this event and it should continue to be propagated.
-     * @see #onKeyUp
-     * @see android.view.KeyEvent
-     */
-    @Override
-    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
-        return mShortcuts.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 
 

@@ -48,7 +48,6 @@ public class MorderWebView
 
     private MorderWebObserver mObserver;
 
-
     public MorderWebView(Context context) {
         super(context);
         assertPreferences();
