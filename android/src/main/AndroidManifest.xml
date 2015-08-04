@@ -58,9 +58,16 @@
                      Like clicking a link in G+:
                      defining memeType == no appear in chooser.
                 -->
-        </intent-filter>
+            </intent-filter>
 
-        <!-- Launcher icon. -->
+            <!-- Allows us to implement the SEARCH action. -->
+            <intent-filter>
+                <action android:name="ANDROID.INTENT.ACTION.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                       android:resource="@xml/searchable" />
+
+            <!-- Launcher icon. -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />

@@ -17,6 +17,9 @@
 package com.spidey01.morder.android.browser;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -31,10 +34,7 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.ShareActionProvider;
-import android.widget.Toast;
+import android.widget.*;
 import com.spidey01.morder.android.BuildConfig;
 import com.spidey01.morder.android.ui.DrawerItemClickListener;
 import com.spidey01.morder.android.R;
@@ -76,7 +76,7 @@ public class BrowserActivity
             mWebView.loadUrl(mWebView.getHomePage());
         } else {
             Log.d(TAG, "we got an intent url to load!");
-            mWebView.loadUrl(intent.getData().toString());
+            handleIntent(intent);
         }
 
     }
@@ -193,6 +193,9 @@ public class BrowserActivity
         // Handle your other action bar items...
 
         switch(item.getItemId()) {
+            case R.id.action_search:
+                onSearchRequested();
+                break;
             case R.id.action_home:
                 mWebView.loadUrl(mWebView.getHomePage());
                 break;
@@ -229,6 +232,27 @@ public class BrowserActivity
         menu.findItem(R.id.action_back).setEnabled(mWebView.canGoBack());
         menu.findItem(R.id.action_forward).setEnabled(mWebView.canGoForward());
 
+        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        //searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, BrowserActivity.class)));
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Log.w("WTF:on*Submit", "s="+s);
+                BrowserActivity.this.handleSearch(s);
+                return true;
+            }
+
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                Log.w("WTF:on*Change", "s="+s);
+                return false;
+            }
+        });
 
         MenuItem shareItem = menu.findItem(R.id.action_share);
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
@@ -294,14 +318,35 @@ public class BrowserActivity
 
     @Override
     protected void onNewIntent(Intent intent) {
+        Log.d(TAG, "onNewIntent()");
+        super.onNewIntent(intent);
+    }
+
+
+    private void handleIntent(Intent intent) {
+        Log.d(TAG, "handleIntent()");
+
         // We don't have tabs yet so just push it into the history and load the new page.
         Uri uri = intent.getData();
-        Log.d(TAG, "onNewIntent(): intent.getData(): " + uri);
-        if (uri != null) {
+        Log.d(TAG, "handleIntent(): intent.getData(): " + uri);
+        if  (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            handleSearch(intent);
+        }
+        else if (uri != null) {
             mWebView.loadUrl(intent.getData().toString());
         }
 
-        super.onNewIntent(intent);
+    }
+
+
+    private void handleSearch(Intent intent) {
+        handleSearch(intent.getStringExtra(SearchManager.QUERY));
+    }
+
+
+    private void handleSearch(String query) {
+        Log.e(TAG, "handleSearch is pissed at "+query);
+        Toast.makeText(this, "Mörder handleSearch(): " + query, Toast.LENGTH_LONG).show();
     }
 
 
@@ -374,7 +419,7 @@ public class BrowserActivity
         }
 
         if (BuildConfig.DEBUG) {
-            Toast.makeText(this, "Mörder onTrimMemory(): " + level, Toast.LENGTH_LONG);
+            Toast.makeText(this, "Mörder onTrimMemory(): " + level, Toast.LENGTH_LONG).show();
         }
 
         super.onTrimMemory(level);
