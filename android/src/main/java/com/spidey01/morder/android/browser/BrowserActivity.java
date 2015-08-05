@@ -347,6 +347,9 @@ public class BrowserActivity
     private void handleSearch(String query) {
         Log.e(TAG, "handleSearch is pissed at "+query);
         Toast.makeText(this, "Mörder handleSearch(): " + query, Toast.LENGTH_LONG).show();
+        // TODO: should collapse the search action.
+        // That's easy, mSearchView.setIconified(true).
+        mWebView.loadUrl("https://www.google.com/?q="+query);
     }
 
 
