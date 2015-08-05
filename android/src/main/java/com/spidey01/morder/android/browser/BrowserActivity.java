@@ -349,8 +349,9 @@ public class BrowserActivity
 
     private void handleSearch(String query) {
         Log.e(TAG, "handleSearch(): query="+query);
-        // TODO: should collapse the search action.
-        // That's easy, mSearchView.setIconified(true).
+        // Make sure he search UI closes after running the search.
+        // calling setIconified(true) doesn't close the SearchView but this does.
+        mMenu.findItem(R.id.action_search).collapseActionView();
 
         // Hard coded for testing.
         mWebView.loadUrl("https://www.google.com/?q="+query);
