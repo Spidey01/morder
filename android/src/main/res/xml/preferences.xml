@@ -24,6 +24,11 @@
         android:key="@string/pref_newTabPage_key"
         android:title="@string/pref_newTabPage_title"/>
 
+    <EditTextPreference
+        android:defaultValue="@string/pref_search_default"
+        android:key="@string/pref_search_key"
+        android:title="@string/pref_search_title"
+        android:summary="@string/pref_search_summery" />
 
     <PreferenceCategory
         android:key="@string/pref_userAgent_key"

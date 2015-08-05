@@ -21,6 +21,7 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -39,6 +40,9 @@ import com.spidey01.morder.android.BuildConfig;
 import com.spidey01.morder.android.ui.DrawerItemClickListener;
 import com.spidey01.morder.android.R;
 import com.spidey01.morder.android.ui.ActionBarDrawerToggle;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 
 public class BrowserActivity
@@ -353,8 +357,24 @@ public class BrowserActivity
         // calling setIconified(true) doesn't close the SearchView but this does.
         mMenu.findItem(R.id.action_search).collapseActionView();
 
+        /*
+                mHomePage = sharedPreferences.getString(key, getResources().getString(R.string.pref_newTabPage_default));
+                break;
+            case PREF_ENABLE_JAVASCRIPT: {
+                if (sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_javascript_default))) {
+                */
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String template = prefs.getString(
+                getResources().getString(R.string.pref_search_key),
+                getResources().getString(R.string.pref_search_default));
+        try {
+            mWebView.loadUrl(template.replace("%s", URLEncoder.encode(query, "UTF-8")));
+        } catch (UnsupportedEncodingException ex) {
+            Log.e(TAG, "handleSearch(): couldn't URL encode the query.", ex);
+        }
+
         // Hard coded for testing.
-        mWebView.loadUrl("https://www.google.com/?q="+query);
+        mWebView.loadUrl("https://www.google.com/?q=" + query);
 
         // This would launch Google Search (or whatever handles it.
         /*
