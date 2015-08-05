@@ -54,6 +54,7 @@ public class BrowserActivity
     private Menu mMenu;
 
     private ShareActionProvider mShareActionProvider;
+    private SearchView mSearchView;
 
 
     @Override
@@ -220,7 +221,25 @@ public class BrowserActivity
     }
 
 
-    @Override
+    /*
+     * Helper to make the SearchView call our handleSearch() method.
+     */
+    private SearchView.OnQueryTextListener mSearchListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            Log.d(TAG, "mSearchListener.onQueryTextSubmit(): s=" + s);
+            BrowserActivity.this.handleSearch(s);
+            return false;
+        }
+
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            return false;
+        }
+    };
+
+
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(TAG, "onCreateOptionsMenu()");
 
@@ -233,26 +252,10 @@ public class BrowserActivity
         menu.findItem(R.id.action_forward).setEnabled(mWebView.canGoForward());
 
         SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        //searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, BrowserActivity.class)));
-        searchView.setIconifiedByDefault(true);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-        {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                Log.w("WTF:on*Submit", "s="+s);
-                BrowserActivity.this.handleSearch(s);
-                return true;
-            }
-
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                Log.w("WTF:on*Change", "s="+s);
-                return false;
-            }
-        });
+        mSearchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mSearchView.setIconifiedByDefault(true);
+        mSearchView.setOnQueryTextListener(mSearchListener);
 
         MenuItem shareItem = menu.findItem(R.id.action_share);
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
@@ -345,11 +348,19 @@ public class BrowserActivity
 
 
     private void handleSearch(String query) {
-        Log.e(TAG, "handleSearch is pissed at "+query);
-        Toast.makeText(this, "Mörder handleSearch(): " + query, Toast.LENGTH_LONG).show();
+        Log.e(TAG, "handleSearch(): query="+query);
         // TODO: should collapse the search action.
         // That's easy, mSearchView.setIconified(true).
+
+        // Hard coded for testing.
         mWebView.loadUrl("https://www.google.com/?q="+query);
+
+        // This would launch Google Search (or whatever handles it.
+        /*
+        Intent i = new Intent(Intent.ACTION_WEB_SEARCH);
+        i.putExtra(SearchManager.QUERY, query);
+        startActivity(i);
+        */
     }
 
 
