@@ -327,6 +327,8 @@ public class BrowserActivity
     protected void onNewIntent(Intent intent) {
         Log.d(TAG, "onNewIntent()");
         super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
     }
 
 
