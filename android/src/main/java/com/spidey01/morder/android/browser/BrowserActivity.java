@@ -375,9 +375,6 @@ public class BrowserActivity
             Log.e(TAG, "handleSearch(): couldn't URL encode the query.", ex);
         }
 
-        // Hard coded for testing.
-        mWebView.loadUrl("https://www.google.com/?q=" + query);
-
         // This would launch Google Search (or whatever handles it.
         /*
         Intent i = new Intent(Intent.ACTION_WEB_SEARCH);
