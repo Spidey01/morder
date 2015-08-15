@@ -122,7 +122,6 @@ public class MorderWebView
     private static final String PREF_USER_AGENT_MODE = "pref_userAgentMode_key";
     private static final String PREF_PAGE_TIMEOUT = "pref_pageTimeout_key";
     private static final String PREF_SHOW_ZOOM_CONTROLS = "pref_showZoomControls_key";
-    private static final String PREF_SEARCH = "pref_search_key";
 
 
     private final void assertPreferences() {
@@ -194,10 +193,6 @@ public class MorderWebView
                 // And the zoom buttons if the above is true.
                 getSettings().setBuiltInZoomControls(true);
                 break;
-            }
-            case PREF_SEARCH: { // TODO: move to BrowserActivity.
-                Log.d(TAG, "Search setting updated");
-                Log.d(TAG, "New search website is" + sharedPreferences.getString(PREF_SEARCH, ""));
             }
         }
     }

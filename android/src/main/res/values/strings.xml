@@ -34,7 +34,7 @@
     <string name="pref_searchShowUi_title">Search Bar</string>
     <string name="pref_searchShowUi_summeryoff">Search action will goto your search provider.</string>
     <string name="pref_searchShowUi_summeryon">Search action will expand to a search bar.</string>
-    <string name="pref_search_website_key">pref_search_template_key</string>
+    <string name="pref_search_website_key">pref_search_website_key</string>
     <string name="pref_search_website_title">Search Website</string>
     <string name="pref_search_website_default">https://www.google.com/?q=%s</string>
     <string name="pref_search_website_summery">Website to use with the search action. Use %s to include the submitted search text.</string>

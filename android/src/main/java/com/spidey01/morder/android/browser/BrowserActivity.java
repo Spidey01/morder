@@ -47,7 +47,7 @@ import java.net.URLEncoder;
 
 public class BrowserActivity
     extends Activity
-    implements MorderWebObserver
+    implements MorderWebObserver, SharedPreferences.OnSharedPreferenceChangeListener
 {
     private static final String TAG = "BrowserActivity";
 
@@ -62,6 +62,8 @@ public class BrowserActivity
     /** SearchView used when the show search UI preference is set. */
     private SearchView mSearchView;
 
+    private boolean mShowSearchUi;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class BrowserActivity
         Log.d(TAG, "onCreate(): " + savedInstanceState);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
         setContentView(R.layout.activity_browser);
 
@@ -254,29 +257,23 @@ public class BrowserActivity
         inflater.inflate(R.menu.menu_browser_activity_actions, menu);
         mMenu = menu;
 
-        menu.findItem(R.id.action_back).setEnabled(mWebView.canGoBack());
-        menu.findItem(R.id.action_forward).setEnabled(mWebView.canGoForward());
+        mMenu.findItem(R.id.action_back).setEnabled(mWebView.canGoBack());
+        mMenu.findItem(R.id.action_forward).setEnabled(mWebView.canGoForward());
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean searchShowUi = prefs.getBoolean(
+        mShowSearchUi = prefs.getBoolean(
                 getResources().getString(R.string.pref_searchShowUi_key),
                 getResources().getBoolean(R.bool.pref_showZoomControls_default)
         );
 
-        if (searchShowUi) {
-            SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
-            //mSearchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
-            mSearchView = new SearchView(getActionBar().getThemedContext());
-            menu.findItem(R.id.action_search).setActionView(mSearchView);
-            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            mSearchView.setIconifiedByDefault(true);
-            mSearchView.setOnQueryTextListener(mSearchListener);
+        if (mShowSearchUi) {
+            enableSearchUi();
         }
 
         MenuItem shareItem = menu.findItem(R.id.action_share);
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
 
-        return super.onCreateOptionsMenu(menu);
+        return super.onCreateOptionsMenu(mMenu);
     }
 
 
@@ -360,6 +357,21 @@ public class BrowserActivity
     }
 
 
+    @Override
+    public boolean onSearchRequested() {
+        Log.d(TAG, "onSearchRequested()");
+
+        boolean launched = super.onSearchRequested();
+        /*
+         * If no search UI is enabled then we need to trigger the search handler here.
+         */
+        if (launched && !mShowSearchUi) {
+            handleSearch();
+        }
+        return launched;
+    }
+
+
     private void handleSearch() {
         handleSearch("");
     }
@@ -371,7 +383,7 @@ public class BrowserActivity
 
 
     private void handleSearch(String query) {
-        Log.e(TAG, "handleSearch(): query="+query);
+        Log.e(TAG, "handleSearch(): query=" + query);
 
         // Make sure he search UI closes after running the search.
         if (mSearchView != null) {
@@ -407,6 +419,39 @@ public class BrowserActivity
             Log.e(TAG, "handlsSearch(): unknown search mode");
             Toast.makeText(this, "Mörder: search preferences may be corrupt.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    private void enableSearchUi() {
+        Log.d(TAG, "enableSearchUi()");
+
+        if (mSearchView != null) {
+            Log.w(TAG, "There's already a SearchView!");
+            Log.d(TAG, "Reusing old SearchView.");
+        } else {
+            //mSearchView = (SearchView)mMenu.findItem(R.id.action_search).getActionView();
+            mSearchView = new SearchView(getActionBar().getThemedContext());
+        }
+
+        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mSearchView.setIconifiedByDefault(true);
+        mSearchView.setOnQueryTextListener(mSearchListener);
+
+        MenuItem action = mMenu.findItem(R.id.action_search);
+        if (action.getActionView() == null) {
+            Log.e(TAG, "There is already an action view set on the search action!");
+            if (BuildConfig.DEBUG) {
+                Toast.makeText(this, "Mörder enableSearchUi: getActionView != null", Toast.LENGTH_LONG).show();
+            }
+        }
+        action.setActionView(mSearchView);
+    }
+
+
+    private void disableSearchUi() {
+        Log.d(TAG, "disableSearchUi()");
+        mMenu.findItem(R.id.action_search).setActionView(null);
     }
 
 
@@ -484,6 +529,31 @@ public class BrowserActivity
 
         super.onTrimMemory(level);
     }
-}
 
-// TODO: handle the searchShowUi setting being changed while the activity is alive.
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        Log.d(TAG, "onSharedPreferenceChanged(): key=" + key);
+
+        final String PREF_SEARCH_WEBSITE = "pref_search_website_key";
+        assert PREF_SEARCH_WEBSITE.equals(getResources().getString(R.string.pref_search_website_key));
+
+        final String PREF_SEARCH_SHOW_UI = "pref_searchShowUi_key";
+        assert PREF_SEARCH_SHOW_UI.equals(getResources().getString(R.string.pref_searchShowUi_key));
+
+        switch(key) {
+            case PREF_SEARCH_WEBSITE:
+                Log.d(TAG, "Search setting updated");
+                Log.d(TAG, "New search website is" + prefs.getString(PREF_SEARCH_WEBSITE, ""));
+                break;
+            case PREF_SEARCH_SHOW_UI:
+                mShowSearchUi = prefs.getBoolean(key, getResources().getBoolean(R.bool.pref_searchShowUi_default));
+                if (mShowSearchUi) {
+                    enableSearchUi();
+                } else {
+                    disableSearchUi();
+                }
+                break;
+        }
+    }
+}
