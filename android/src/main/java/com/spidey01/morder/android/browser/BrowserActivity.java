@@ -438,14 +438,7 @@ public class BrowserActivity
         mSearchView.setIconifiedByDefault(true);
         mSearchView.setOnQueryTextListener(mSearchListener);
 
-        MenuItem action = mMenu.findItem(R.id.action_search);
-        if (action.getActionView() == null) {
-            Log.e(TAG, "There is already an action view set on the search action!");
-            if (BuildConfig.DEBUG) {
-                Toast.makeText(this, "Mörder enableSearchUi: getActionView != null", Toast.LENGTH_LONG).show();
-            }
-        }
-        action.setActionView(mSearchView);
+        mMenu.findItem(R.id.action_search).setActionView(mSearchView);
     }
 
 
