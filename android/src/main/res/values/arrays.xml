@@ -24,6 +24,12 @@
     <item>@string/action_quit</item>
   </string-array>
 
+  <!-- Used to decide how to handle SEARCH actions. -->
+  <string-array name="pref_searchMode_array">
+    <item>@string/pref_searchMode_mode_goToSite</item>
+    <item>@string/pref_searchMode_mode_goToActivity</item>
+  </string-array>
+
   <!-- Used to determine user agent emulation mode. -->
   <string-array name="pref_userAgentMode_array">
     <item>@string/pref_userAgentMode_default</item>

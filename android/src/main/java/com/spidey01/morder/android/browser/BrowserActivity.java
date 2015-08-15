@@ -58,6 +58,8 @@ public class BrowserActivity
     private Menu mMenu;
 
     private ShareActionProvider mShareActionProvider;
+
+    /** SearchView used when the show search UI preference is set. */
     private SearchView mSearchView;
 
 
@@ -255,11 +257,21 @@ public class BrowserActivity
         menu.findItem(R.id.action_back).setEnabled(mWebView.canGoBack());
         menu.findItem(R.id.action_forward).setEnabled(mWebView.canGoForward());
 
-        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
-        mSearchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
-        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        mSearchView.setIconifiedByDefault(true);
-        mSearchView.setOnQueryTextListener(mSearchListener);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean searchShowUi = prefs.getBoolean(
+                getResources().getString(R.string.pref_searchShowUi_key),
+                getResources().getBoolean(R.bool.pref_showZoomControls_default)
+        );
+
+        if (searchShowUi) {
+            SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+            //mSearchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
+            mSearchView = new SearchView(getActionBar().getThemedContext());
+            menu.findItem(R.id.action_search).setActionView(mSearchView);
+            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            mSearchView.setIconifiedByDefault(true);
+            mSearchView.setOnQueryTextListener(mSearchListener);
+        }
 
         MenuItem shareItem = menu.findItem(R.id.action_share);
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
@@ -348,6 +360,11 @@ public class BrowserActivity
     }
 
 
+    private void handleSearch() {
+        handleSearch("");
+    }
+
+
     private void handleSearch(Intent intent) {
         handleSearch(intent.getStringExtra(SearchManager.QUERY));
     }
@@ -355,32 +372,41 @@ public class BrowserActivity
 
     private void handleSearch(String query) {
         Log.e(TAG, "handleSearch(): query="+query);
-        // Make sure he search UI closes after running the search.
-        // calling setIconified(true) doesn't close the SearchView but this does.
-        mMenu.findItem(R.id.action_search).collapseActionView();
 
-        /*
-                mHomePage = sharedPreferences.getString(key, getResources().getString(R.string.pref_newTabPage_default));
-                break;
-            case PREF_ENABLE_JAVASCRIPT: {
-                if (sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_javascript_default))) {
-                */
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String template = prefs.getString(
-                getResources().getString(R.string.pref_search_key),
-                getResources().getString(R.string.pref_search_default));
-        try {
-            mWebView.loadUrl(template.replace("%s", URLEncoder.encode(query, "UTF-8")));
-        } catch (UnsupportedEncodingException ex) {
-            Log.e(TAG, "handleSearch(): couldn't URL encode the query.", ex);
+        // Make sure he search UI closes after running the search.
+        if (mSearchView != null) {
+            // calling setIconified(true) doesn't close the SearchView but this does.
+            mMenu.findItem(R.id.action_search).collapseActionView();
         }
 
-        // This would launch Google Search (or whatever handles it.
-        /*
-        Intent i = new Intent(Intent.ACTION_WEB_SEARCH);
-        i.putExtra(SearchManager.QUERY, query);
-        startActivity(i);
-        */
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String mode = prefs.getString(getResources().getString(R.string.pref_searchMode_key), "");
+        Log.d(TAG, "handleSearch(): mode is " + mode);
+
+        if (mode.equals(getResources().getString(R.string.pref_searchMode_mode_goToSite))) {
+            String template = prefs.getString(
+                    getResources().getString(R.string.pref_search_website_key),
+                    getResources().getString(R.string.pref_search_website_default));
+            try {
+                // TODO: handle empty query.
+                mWebView.loadUrl(template.replace("%s", URLEncoder.encode(query, "UTF-8")));
+            } catch (UnsupportedEncodingException ex) {
+                Log.e(TAG, "handleSearch(): couldn't URL encode the query.", ex);
+            }
+        }
+        else if (mode.equals(getResources().getString(R.string.pref_searchMode_mode_goToActivity))) {
+            // This will launch the systems web search
+            Intent i = new Intent(Intent.ACTION_WEB_SEARCH);
+            if (!query.isEmpty()) {
+                i.putExtra(SearchManager.QUERY, query);
+            }
+            startActivity(i);
+        }
+        else {
+            Log.e(TAG, "handlsSearch(): unknown search mode");
+            Toast.makeText(this, "Mörder: search preferences may be corrupt.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -459,3 +485,5 @@ public class BrowserActivity
         super.onTrimMemory(level);
     }
 }
+
+// TODO: handle the searchShowUi setting being changed while the activity is alive.

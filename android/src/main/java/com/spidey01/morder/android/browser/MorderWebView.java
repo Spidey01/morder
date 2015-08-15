@@ -195,9 +195,9 @@ public class MorderWebView
                 getSettings().setBuiltInZoomControls(true);
                 break;
             }
-            case PREF_SEARCH: {
+            case PREF_SEARCH: { // TODO: move to BrowserActivity.
                 Log.d(TAG, "Search setting updated");
-                Log.d(TAG, "New search template is" + sharedPreferences.getString(PREF_SEARCH, ""));
+                Log.d(TAG, "New search website is" + sharedPreferences.getString(PREF_SEARCH, ""));
             }
         }
     }

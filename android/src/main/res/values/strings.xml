@@ -24,9 +24,20 @@
     <string name="pref_newTabPage_title">Home Page</string>
     <string name="pref_newTabPage_default">https://www.google.com/</string>
     <string name="pref_search_key">pref_search_key</string>
-    <string name="pref_search_title">Search Template</string>
-    <string name="pref_search_default">https://www.google.com/?q=%s</string>
-    <string name="pref_search_summery">Template to use with the search action. %s will be replaced with the submitted search text.</string>
+    <string name="pref_search_title">Search</string>
+    <string name="pref_searchMode_key">pref_searchMode_key</string>
+    <string name="pref_searchMode_title">Search Mode</string>
+    <string name="pref_searchMode_summery">Perform web searches using the search website or ask OS for a web search activity.</string>
+    <string name="pref_searchMode_mode_goToSite">Goto Website</string>
+    <string name="pref_searchMode_mode_goToActivity">Launch activity</string>
+    <string name="pref_searchShowUi_key">pref_searchShowUi_key</string>
+    <string name="pref_searchShowUi_title">Search Bar</string>
+    <string name="pref_searchShowUi_summeryoff">Search action will goto your search provider.</string>
+    <string name="pref_searchShowUi_summeryon">Search action will expand to a search bar.</string>
+    <string name="pref_search_website_key">pref_search_template_key</string>
+    <string name="pref_search_website_title">Search Website</string>
+    <string name="pref_search_website_default">https://www.google.com/?q=%s</string>
+    <string name="pref_search_website_summery">Website to use with the search action. Use %s to include the submitted search text.</string>
     <string name="pref_userAgent_key">pref_userAgent_title</string>
     <string name="pref_userAgent_title">User Agent</string>
     <string name="pref_userAgentMode_key">pref_userAgentMode_key</string>

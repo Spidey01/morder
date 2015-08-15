@@ -17,7 +17,8 @@
 
 <resources>
 
-    <bool name="pref_javascript_default">true</bool>
-    <bool name="pref_showZoomControls_default">false</bool>
+  <bool name="pref_searchShowUi_default">true</bool>
+  <bool name="pref_javascript_default">true</bool>
+  <bool name="pref_showZoomControls_default">false</bool>
 
 </resources>

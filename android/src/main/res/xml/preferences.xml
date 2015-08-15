@@ -24,11 +24,48 @@
         android:key="@string/pref_newTabPage_key"
         android:title="@string/pref_newTabPage_title"/>
 
-    <EditTextPreference
-        android:defaultValue="@string/pref_search_default"
+    <PreferenceCategory
         android:key="@string/pref_search_key"
-        android:title="@string/pref_search_title"
-        android:summary="@string/pref_search_summery" />
+        android:title="@string/pref_search_title">
+
+        <!--
+        <ListPreference
+            android:defaultValue="@string/pref_pageTimeout_default"
+            android:dialogTitle="@string/pref_pageTimeout_title"
+            android:entries="@array/pref_pageTimeout_array"
+            android:entryValues="@array/pref_pageTimeout_array"
+            android:key="@string/pref_pageTimeout_key"
+            android:summary="@string/pref_pageTimeout_summery"
+            android:title="@string/pref_pageTimeout_title" />
+
+            settings mode: { website, activity }
+            show search bar [ whether to use search UI or not ]
+        -->
+
+        <ListPreference
+            android:defaultValue="@string/pref_searchMode_mode_goToSite"
+            android:dialogTitle="@string/pref_searchMode_title"
+            android:entries="@array/pref_searchMode_array"
+            android:entryValues="@array/pref_searchMode_array"
+            android:key="@string/pref_searchMode_key"
+            android:summary="@string/pref_searchMode_summery"
+            android:title="@string/pref_searchMode_title" />
+
+        <CheckBoxPreference
+            android:key="@string/pref_searchShowUi_key"
+            android:title="@string/pref_searchShowUi_title"
+            android:defaultValue="@bool/pref_searchShowUi_default"
+            android:summaryOff="@string/pref_searchShowUi_summeryoff"
+            android:summaryOn="@string/pref_searchShowUi_summeryon" />
+
+
+        <EditTextPreference
+            android:defaultValue="@string/pref_search_website_default"
+            android:key="@string/pref_search_website_key"
+            android:title="@string/pref_search_website_title"
+            android:summary="@string/pref_search_website_summery" />
+
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:key="@string/pref_userAgent_key"
