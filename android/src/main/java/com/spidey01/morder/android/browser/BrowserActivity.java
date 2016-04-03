@@ -289,22 +289,7 @@ public class BrowserActivity
             enableSearchUi();
         }
 
-        /* Make sure these are set because we will be recalled on drawer open/close. */
-        menu.findItem(R.id.action_back).setVisible(mWebView.canGoBack());
-        menu.findItem(R.id.action_forward).setVisible(mWebView.canGoForward() || mWebView.canGoBack());
-
-        /* Make sure we (re)set these because no default is defined and drawer
-         * open/close will call this method again. */
-        MenuItem refreshItem = menu.findItem(R.id.action_refresh);
-        if (mWebView.getProgress() == 100) {
-            refreshItem.setIcon(R.drawable.ic_action_refresh);
-            refreshItem.setTitle(R.string.action_refresh);
-            Log.v(TAG, "action_stop -> action_refresh");
-        } else {
-            refreshItem.setIcon(R.drawable.ic_action_stop);
-            refreshItem.setTitle(R.string.action_stop);
-            Log.v(TAG, "action_refresh -> action_stop");
-        }
+        updateNavigationButtons(menu);
 
         MenuItem shareItem = menu.findItem(R.id.action_share);
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
@@ -321,6 +306,7 @@ public class BrowserActivity
         }
     };
 
+
     @Override
     public void onPageStarted(MorderWebView view, String url, Bitmap favicon) {
         Log.v(TAG, "onPageStarted()");
@@ -332,16 +318,7 @@ public class BrowserActivity
         }
 
         if (mMenu != null) {
-            if (view.canGoBack()) {
-                Log.v(TAG, "action_back: making visible.");
-                MenuItem back = mMenu.findItem(R.id.action_back);
-                back.setVisible(true);
-            }
-
-            MenuItem refresh = mMenu.findItem(R.id.action_refresh);
-            refresh.setIcon(R.drawable.ic_action_stop);
-            refresh.setTitle(R.string.action_stop);
-            Log.v(TAG, "action_refresh -> action_stop");
+            updateNavigationButtons(mMenu);
         }
 
         if (mShareActionProvider != null) {
@@ -364,17 +341,7 @@ public class BrowserActivity
     public void onPageFinished(MorderWebView view, String url) {
         Log.v(TAG, "onPageFinished()");
         if (mMenu != null) {
-            if (view.canGoForward() || view.canGoBack()) {
-                Log.v(TAG, "action_forward: making visible.");
-                MenuItem forward = mMenu.findItem(R.id.action_forward);
-                forward.setEnabled(true);
-                forward.setVisible(true);
-            }
-
-            MenuItem refresh = mMenu.findItem(R.id.action_refresh);
-            refresh.setIcon(R.drawable.ic_action_refresh);
-            refresh.setTitle(R.string.action_refresh);
-            Log.v(TAG, "action_stop -> action_refresh");
+            updateNavigationButtons(mMenu);
         }
 
 
@@ -382,6 +349,33 @@ public class BrowserActivity
             Log.v(TAG, "Clearing page timeout.");
             mUiHandler.removeCallbacks(mPageLoadStopper);
         }
+    }
+
+
+    /** Update state of browser navigation buttons.
+     *
+     * This should be called when the menu is created.
+     * This should be called when the page load starts.
+     * This should be called when page load finishes.
+     *
+     */
+    private void updateNavigationButtons(Menu menu) {
+        boolean showArrows = mWebView.canGoForward() || mWebView.canGoBack();
+        Log.v(TAG, "action_back, action_forward: setVisible " + showArrows);
+        menu.findItem(R.id.action_back).setVisible(showArrows);
+        menu.findItem(R.id.action_forward).setVisible(showArrows);
+
+        MenuItem refresh = menu.findItem(R.id.action_refresh);
+        if (mWebView.getProgress() == 100) {
+            refresh.setIcon(R.drawable.ic_action_refresh);
+            refresh.setTitle(R.string.action_refresh);
+            Log.v(TAG, "action_stop -> action_refresh");
+        } else {
+            refresh.setIcon(R.drawable.ic_action_stop);
+            refresh.setTitle(R.string.action_stop);
+            Log.v(TAG, "action_refresh -> action_stop");
+        }
+
     }
 
 
