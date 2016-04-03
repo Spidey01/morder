@@ -97,7 +97,7 @@ public class MorderWebViewClient
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
-        Log.v(TAG, "onPageStarted(): url="+url);
+        Log.v(TAG, "onPageFinished(): url="+url);
         mObserver.onPageFinished((MorderWebView)view, url);
     }
 
