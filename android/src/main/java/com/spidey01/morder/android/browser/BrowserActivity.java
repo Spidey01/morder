@@ -224,6 +224,15 @@ public class BrowserActivity
                     mWebView.goBack();
                 }
                 break;
+            case R.id.action_refresh:
+                int progress = mWebView.getProgress();
+                if (progress == 100) {
+                    Log.d(TAG, "Reloading page.");
+                    mWebView.reload();
+                } else {
+                    Log.d(TAG, "Stopping page load.");
+                    mWebView.stopLoading();
+                }
             case R.id.action_forward:
                 if (mWebView.canGoForward()) {
                     mWebView.goForward();
@@ -311,6 +320,11 @@ public class BrowserActivity
         if (mMenu != null) {
             mMenu.findItem(R.id.action_back).setEnabled(mWebView.canGoBack());
             Log.d(TAG, "action_back: "+ mMenu.findItem(R.id.action_back).isEnabled());
+
+            MenuItem refresh = mMenu.findItem(R.id.action_refresh);
+            refresh.setIcon(R.drawable.ic_action_stop);
+            refresh.setTitle(R.string.action_stop);
+            Log.v(TAG, "action_refresh -> action_stop");
         }
 
         if (mShareActionProvider != null) {
@@ -335,6 +349,11 @@ public class BrowserActivity
         if (mMenu != null) {
             mMenu.findItem(R.id.action_forward).setEnabled(mWebView.canGoForward());
             Log.d(TAG, "action_forward: "+ mMenu.findItem(R.id.action_forward).isEnabled());
+
+            MenuItem refresh = mMenu.findItem(R.id.action_refresh);
+            refresh.setIcon(R.drawable.ic_action_refresh);
+            refresh.setTitle(R.string.action_refresh);
+            Log.v(TAG, "action_stop -> action_refresh");
         }
 
 

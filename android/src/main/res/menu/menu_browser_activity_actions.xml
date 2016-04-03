@@ -32,6 +32,10 @@
         android:icon="@drawable/ic_action_back"
         android:showAsAction="always"
         android:title="@string/action_back"/>
+    <!-- title and icon will be dynamically set in BrowserActivity. -->
+    <item
+        android:id="@+id/action_refresh"
+        android:showAsAction="always"/>
     <item
         android:id="@+id/action_forward"
         android:icon="@drawable/ic_action_forward"
