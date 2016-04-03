@@ -17,6 +17,7 @@
     <string name="action_back">Go back</string>
     <string name="action_forward">Go forward</string>
     <string name="action_share">Share</string>
+    <string name="action_print">Print</string>
 
     <!-- strings for SettingsActivity & friends. -->
     <string name="title_activity_settings">SettingsActivity</string>
