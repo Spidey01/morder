@@ -293,6 +293,19 @@ public class BrowserActivity
         menu.findItem(R.id.action_back).setVisible(mWebView.canGoBack());
         menu.findItem(R.id.action_forward).setVisible(mWebView.canGoForward() || mWebView.canGoBack());
 
+        /* Make sure we (re)set these because no default is defined and drawer
+         * open/close will call this method again. */
+        MenuItem refreshItem = menu.findItem(R.id.action_refresh);
+        if (mWebView.getProgress() == 100) {
+            refreshItem.setIcon(R.drawable.ic_action_refresh);
+            refreshItem.setTitle(R.string.action_refresh);
+            Log.v(TAG, "action_stop -> action_refresh");
+        } else {
+            refreshItem.setIcon(R.drawable.ic_action_stop);
+            refreshItem.setTitle(R.string.action_stop);
+            Log.v(TAG, "action_refresh -> action_stop");
+        }
+
         MenuItem shareItem = menu.findItem(R.id.action_share);
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
 
