@@ -279,9 +279,6 @@ public class BrowserActivity
         inflater.inflate(R.menu.menu_browser_activity_actions, menu);
         mMenu = menu;
 
-        mMenu.findItem(R.id.action_back).setEnabled(mWebView.canGoBack());
-        mMenu.findItem(R.id.action_forward).setEnabled(mWebView.canGoForward());
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mShowSearchUi = prefs.getBoolean(
                 getResources().getString(R.string.pref_searchShowUi_key),
@@ -318,8 +315,11 @@ public class BrowserActivity
         }
 
         if (mMenu != null) {
-            mMenu.findItem(R.id.action_back).setEnabled(mWebView.canGoBack());
-            Log.d(TAG, "action_back: "+ mMenu.findItem(R.id.action_back).isEnabled());
+            if (mWebView.canGoBack()) {
+                Log.v(TAG, "action_back: making visible.");
+                MenuItem back = mMenu.findItem(R.id.action_back);
+                back.setVisible(true);
+            }
 
             MenuItem refresh = mMenu.findItem(R.id.action_refresh);
             refresh.setIcon(R.drawable.ic_action_stop);
@@ -347,8 +347,12 @@ public class BrowserActivity
     public void onPageFinished(MorderWebView view, String url) {
         Log.v(TAG, "onPageFinished()");
         if (mMenu != null) {
-            mMenu.findItem(R.id.action_forward).setEnabled(mWebView.canGoForward());
-            Log.d(TAG, "action_forward: "+ mMenu.findItem(R.id.action_forward).isEnabled());
+            if (mWebView.canGoForward() || mWebView.canGoBack()) {
+                Log.v(TAG, "action_forward: making visible.");
+                MenuItem forward = mMenu.findItem(R.id.action_forward);
+                forward.setEnabled(true);
+                forward.setVisible(true);
+            }
 
             MenuItem refresh = mMenu.findItem(R.id.action_refresh);
             refresh.setIcon(R.drawable.ic_action_refresh);
