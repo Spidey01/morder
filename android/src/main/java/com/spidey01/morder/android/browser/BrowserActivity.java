@@ -16,6 +16,7 @@
 
 package com.spidey01.morder.android.browser;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
@@ -100,6 +101,8 @@ public class BrowserActivity
 
 
     private ActionBarDrawerToggle mDrawerToggle;
+
+    @SuppressLint("Assert")
     public void enableDrawer() {
         Log.d(TAG, "enableDrawer()");
 
@@ -555,6 +558,7 @@ public class BrowserActivity
 
 
     @Override
+    @SuppressLint("Assert")
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         Log.d(TAG, "onSharedPreferenceChanged(): key=" + key);
 

@@ -16,6 +16,7 @@
 
 package com.spidey01.morder.android.browser;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -101,6 +102,7 @@ public class MorderWebView
     }
 
 
+    @SuppressLint("SetJavaScriptEnabled")
     public void enableJavaScript() {
         Log.i(TAG, "enableJavaScript()");
         getSettings().setJavaScriptEnabled(true);
@@ -124,6 +126,7 @@ public class MorderWebView
     private static final String PREF_SHOW_ZOOM_CONTROLS = "pref_showZoomControls_key";
 
 
+    @SuppressLint("Assert")
     private final void assertPreferences() {
         String p;
         final String msg = TAG+": out of sync with resources.";
@@ -230,6 +233,7 @@ public class MorderWebView
     }
 
 
+    @SuppressLint("Assert")
     private String parseUserAgentMode(String mode) {
         assert SYSTEM_WEBVIEW_UA != null;
 
