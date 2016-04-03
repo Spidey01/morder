@@ -33,7 +33,7 @@
     <item
         android:id="@+id/action_back"
         android:icon="@drawable/ic_action_back"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:visible="false"
         android:title="@string/action_back"/>
     <item
@@ -42,7 +42,7 @@
     <item
         android:id="@+id/action_forward"
         android:icon="@drawable/ic_action_forward"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:visible="false"
         android:title="@string/action_forward"/>
     <item
