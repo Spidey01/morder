@@ -16,6 +16,7 @@
 
 package com.spidey01.morder.android.browser;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ComponentName;
@@ -25,6 +26,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -456,6 +458,7 @@ public class BrowserActivity
     }
 
 
+    @TargetApi(21)
     public void onPrintRequested() {
         Log.d(TAG, "onPrintRequested()");
 
@@ -463,10 +466,13 @@ public class BrowserActivity
         Log.i(TAG, "Printing document " + name);
 
         PrintManager manager = (PrintManager)getSystemService(Context.PRINT_SERVICE);
-        // >= Lollipop 21
-        // PrintDocumentAdapter adapter = mWebView.createPrintDocumentAdapter(name);
-        // >= Kit Kat 19; deprecated in 21.
-        PrintDocumentAdapter adapter = mWebView.createPrintDocumentAdapter();
+        PrintDocumentAdapter adapter;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            adapter = mWebView.createPrintDocumentAdapter(name);
+        } else {
+            // Drepcated in Lollipop 21 but needed for Kit Kat / 19 devices.
+            adapter = mWebView.createPrintDocumentAdapter();
+        }
         PrintJob job = manager.print(name, adapter, new PrintAttributes.Builder().build());
         Log.d(TAG, job.getInfo().toString());
     }
