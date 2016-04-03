@@ -28,14 +28,14 @@
         android:showAsAction="ifRoom"
         android:title="@string/action_home"/>
     <!-- action_back, action_refresh, action_forward will be dynamically
-         modified for in onPageStarted() / onPageFinished(). -->
+         modified for in onCreateOptionsMenu(), onPageStarted(), and the
+         onPageFinished() methods. -->
     <item
         android:id="@+id/action_back"
         android:icon="@drawable/ic_action_back"
         android:showAsAction="always"
         android:visible="false"
         android:title="@string/action_back"/>
-    <!-- title and icon will be dynamically set in BrowserActivity. -->
     <item
         android:id="@+id/action_refresh"
         android:showAsAction="always"/>

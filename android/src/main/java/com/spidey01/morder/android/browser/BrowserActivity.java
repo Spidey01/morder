@@ -289,6 +289,10 @@ public class BrowserActivity
             enableSearchUi();
         }
 
+        /* Make sure these are set because we will be recalled on drawer open/close. */
+        menu.findItem(R.id.action_back).setVisible(mWebView.canGoBack());
+        menu.findItem(R.id.action_forward).setVisible(mWebView.canGoForward() || mWebView.canGoBack());
+
         MenuItem shareItem = menu.findItem(R.id.action_share);
         mShareActionProvider = (ShareActionProvider)shareItem.getActionProvider();
 
