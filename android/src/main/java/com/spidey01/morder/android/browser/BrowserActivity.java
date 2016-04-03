@@ -308,14 +308,14 @@ public class BrowserActivity
     public void onPageStarted(MorderWebView view, String url, Bitmap favicon) {
         Log.v(TAG, "onPageStarted()");
 
-        int pageTimeout = mWebView.getPageTimeout();
+        int pageTimeout = view.getPageTimeout();
         if (pageTimeout != MorderWebView.PAGE_TIMEOUT_NEVER) {
             Log.v(TAG, "Setting page timeout.");
             mUiHandler.postDelayed(mPageLoadStopper, pageTimeout /* seconds */ * 1000);
         }
 
         if (mMenu != null) {
-            if (mWebView.canGoBack()) {
+            if (view.canGoBack()) {
                 Log.v(TAG, "action_back: making visible.");
                 MenuItem back = mMenu.findItem(R.id.action_back);
                 back.setVisible(true);
@@ -331,7 +331,7 @@ public class BrowserActivity
             Log.v(TAG, "Updating Intent for mShareActionProvider.");
             /*
              * We don't really want to do all this every page start.
-             * We should find a way to do it dynamically via callback or a custom impl of ShareActionProvider that has a reference to mWebView.
+             * We should find a way to do it dynamically via callback or a custom impl of ShareActionProvider that has a reference to view.
              */
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
@@ -347,7 +347,7 @@ public class BrowserActivity
     public void onPageFinished(MorderWebView view, String url) {
         Log.v(TAG, "onPageFinished()");
         if (mMenu != null) {
-            if (mWebView.canGoForward() || mWebView.canGoBack()) {
+            if (view.canGoForward() || view.canGoBack()) {
                 Log.v(TAG, "action_forward: making visible.");
                 MenuItem forward = mMenu.findItem(R.id.action_forward);
                 forward.setEnabled(true);
@@ -361,7 +361,7 @@ public class BrowserActivity
         }
 
 
-        if (mWebView.getPageTimeout() != MorderWebView.PAGE_TIMEOUT_NEVER) {
+        if (view.getPageTimeout() != MorderWebView.PAGE_TIMEOUT_NEVER) {
             Log.v(TAG, "Clearing page timeout.");
             mUiHandler.removeCallbacks(mPageLoadStopper);
         }
