@@ -28,6 +28,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.print.PrintAttributes;
+import android.print.PrintAttributes.Builder;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintJob;
+import android.print.PrintManager;
 import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -218,6 +223,9 @@ public class BrowserActivity
                 if (mWebView.canGoForward()) {
                     mWebView.goForward();
                 }
+                break;
+            case R.id.action_print:
+                onPrintRequested();
                 break;
             /*
             default:
@@ -445,6 +453,22 @@ public class BrowserActivity
     private void disableSearchUi() {
         Log.d(TAG, "disableSearchUi()");
         mMenu.findItem(R.id.action_search).setActionView(null);
+    }
+
+
+    public void onPrintRequested() {
+        Log.d(TAG, "onPrintRequested()");
+
+        final String name = mWebView.getTitle();
+        Log.i(TAG, "Printing document " + name);
+
+        PrintManager manager = (PrintManager)getSystemService(Context.PRINT_SERVICE);
+        // >= Lollipop 21
+        // PrintDocumentAdapter adapter = mWebView.createPrintDocumentAdapter(name);
+        // >= Kit Kat 19; deprecated in 21.
+        PrintDocumentAdapter adapter = mWebView.createPrintDocumentAdapter();
+        PrintJob job = manager.print(name, adapter, new PrintAttributes.Builder().build());
+        Log.d(TAG, job.getInfo().toString());
     }
 
 
