@@ -38,7 +38,8 @@
         android:title="@string/action_back"/>
     <item
         android:id="@+id/action_refresh"
-        android:showAsAction="always"/>
+        android:showAsAction="always"
+        android:title="@string/action_refresh"/>
     <item
         android:id="@+id/action_forward"
         android:icon="@drawable/ic_action_forward"
