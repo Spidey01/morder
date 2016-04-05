@@ -31,15 +31,15 @@
          modified for in onCreateOptionsMenu(), onPageStarted(), and the
          onPageFinished() methods. -->
     <item
+        android:id="@+id/action_refresh"
+        android:showAsAction="always"
+        android:title="@string/action_refresh"/>
+    <item
         android:id="@+id/action_back"
         android:icon="@drawable/ic_action_back"
         android:showAsAction="ifRoom"
         android:visible="false"
         android:title="@string/action_back"/>
-    <item
-        android:id="@+id/action_refresh"
-        android:showAsAction="always"
-        android:title="@string/action_refresh"/>
     <item
         android:id="@+id/action_forward"
         android:icon="@drawable/ic_action_forward"
