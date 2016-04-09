@@ -55,3 +55,47 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:23.2.1'
 }
+
+
+task updateVersionFiles(description: "Update assets/version and assets/branch") {
+    // This will give us names like this depending on current state:
+    //
+    //  tag checked out  => ${name of tag}
+    //  head of a branch => ${name-of-tag}-${n commits since tag}-${commit id of head}
+    //
+    //  '-dirty' will be appended if files are modified and --dirty option given.
+    //
+    //  Adding --exact-match would make it error in the second case.
+    //
+    def tagCommand = ['git', 'describe', '--dirty', '--tags']
+    def tagName = new ByteArrayOutputStream()
+    exec {
+        commandLine tagCommand
+        standardOutput tagName
+    }
+    ext.tag = tagName.toString()
+    def versionFile = new FileOutputStream(file('src/main/assets/version'))
+    tagName.writeTo(versionFile)
+
+
+    //
+    // This will get us the branch name if it exists.
+    //
+    def branchCommand = ['git', 'symbolic-ref', '--short', '-q', 'HEAD']
+    def branchName = new ByteArrayOutputStream()
+    exec {
+        commandLine branchCommand
+        standardOutput branchName
+        ignoreExitValue true
+    }
+    ext.branch = branchName.toString()
+    def branchFile = new FileOutputStream(file('src/main/assets/branch'))
+    branchName.writeTo(branchFile)
+
+}
+
+
+gradle.projectsEvaluated {
+    preBuild.dependsOn updateVersionFiles
+}
+
