@@ -97,5 +97,17 @@ task updateVersionFiles(description: "Update assets/version and assets/branch") 
 
 gradle.projectsEvaluated {
     preBuild.dependsOn updateVersionFiles
+
+    // If you need to add compiler options like for this warning:
+    //
+    //      Note: Some input files use or override a deprecated API.
+    //      Note: Recompile with -Xlint:deprecation for details.
+    //
+    // Then uncomment and have at it.
+    /*
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:deprecation"
+    }
+     */
 }
 
