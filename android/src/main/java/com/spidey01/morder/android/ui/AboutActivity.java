@@ -50,7 +50,9 @@ public class AboutActivity extends Activity {
     }
 
 
+    static final String VERSION_INFO_HERE = "VERSION_INFO_HERE";
     private String getLicense() {
+
         try {
             InputStream stream =  getAssets().open("license.html");
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF8"));
@@ -60,13 +62,45 @@ public class AboutActivity extends Activity {
              * Makes sure that the character set will be loaded correctly.
              */
             buffer.append("data:text/html;charset=UTF8;,");
-            while ((line = reader.readLine()) != null) { buffer.append(line); }
+            while ((line = reader.readLine()) != null) {
+                if (line.equals(VERSION_INFO_HERE)) {
+                    buffer.append(getVersion());
+                } else {
+                    buffer.append(line);
+                }
+            }
             reader.close();
             return buffer.toString();
         } catch (IOException ex) {
             Log.e(TAG, "getLicense() failed", ex);
             return ex.toString();
         }
+    }
+
+
+    private String getVersion() {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("<p>Git Version: ");
+        try {
+            BufferedReader vReader = new BufferedReader(new InputStreamReader(getAssets().open("version")));
+            buffer.append(vReader.readLine());
+            vReader.close();
+        } catch (IOException ex) {
+            buffer.append(ex.toString());
+        }
+        buffer.append("</p>");
+
+        buffer.append("<p>Git branch: ");
+        try {
+            BufferedReader vBranch = new BufferedReader(new InputStreamReader(getAssets().open("branch")));
+            buffer.append(vBranch.readLine());
+            vBranch.close();
+        } catch (IOException ex) {
+            buffer.append(ex.toString());
+        }
+        buffer.append("</p>");
+
+        return buffer.toString();
     }
 
 
