@@ -29,6 +29,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import com.spidey01.morder.android.BuildConfig;
+
+
 public class AboutActivity extends Activity {
     private static final String TAG = "AboutActivity";
 
@@ -51,6 +54,7 @@ public class AboutActivity extends Activity {
 
 
     static final String VERSION_INFO_HERE = "VERSION_INFO_HERE";
+    static final String BUILD_INFO_HERE = "BUILD_INFO_HERE";
     private String getLicense() {
 
         try {
@@ -65,6 +69,8 @@ public class AboutActivity extends Activity {
             while ((line = reader.readLine()) != null) {
                 if (line.equals(VERSION_INFO_HERE)) {
                     buffer.append(getVersion());
+                } else if (line.equals(BUILD_INFO_HERE)) {
+                    getBuildInfo(buffer);
                 } else {
                     buffer.append(line);
                 }
@@ -101,6 +107,14 @@ public class AboutActivity extends Activity {
         buffer.append("</p>");
 
         return buffer.toString();
+    }
+
+
+    private void getBuildInfo(StringBuilder s) {
+        s.append("<p>")
+         .append("Build Config: ")
+         .append(BuildConfig.DEBUG ? "DEBUG" : "RELEASE")
+         .append("</p>");
     }
 
 
