@@ -95,8 +95,41 @@ task updateVersionFiles(description: "Update assets/version and assets/branch") 
 }
 
 
+task updateBuildInfoFiles(description: "Update assets/buildinfo") {
+    file('src/main/assets/buildinfo').newOutputStream().withWriter('UTF-8') { w ->
+        def data = [
+            'Compiled with': [
+                'java.compiler', 'java.home', 'java.vendor', 'java.vendor.url',
+                'java.vm.version', 'java.vm.vendor', 'java.vm.name',
+                'java.vm.specification.version',
+            ],
+            'Compiled on':   ['os.name', 'os.version', 'os.arch'],
+            'Compiled by':   [
+                'user.name', 'user.dir',
+                'COMPUTERNAME', 'HOSTNAME'
+            ],
+        ]
+
+        data.each { section, props ->
+            w.append(section).append(': { ').append(System.lineSeparator)
+            for (p in props) {
+                w.append('\t').append(p).append(':');
+                def value = System.getProperty(p)
+                if (value == null) {
+                    value = System.getenv(p)
+                }
+                w.append(value)
+                w.append(', ').append(System.lineSeparator)
+            }
+            w.append('}').append(System.lineSeparator)
+        }
+    }
+}
+
+
 gradle.projectsEvaluated {
     preBuild.dependsOn updateVersionFiles
+    preBuild.dependsOn updateBuildInfoFiles
 
     // If you need to add compiler options like for this warning:
     //
