@@ -68,7 +68,7 @@ public class AboutActivity extends Activity {
             buffer.append("data:text/html;charset=UTF8;,");
             while ((line = reader.readLine()) != null) {
                 if (line.equals(VERSION_INFO_HERE)) {
-                    buffer.append(getVersion());
+                    getVersion(buffer);
                 } else if (line.equals(BUILD_INFO_HERE)) {
                     getBuildInfo(buffer);
                 } else {
@@ -84,29 +84,27 @@ public class AboutActivity extends Activity {
     }
 
 
-    private String getVersion() {
+    private void getVersion(StringBuilder s) {
         StringBuilder buffer = new StringBuilder();
-        buffer.append("<p>Git Version: ");
+        s.append("<p>Git Version: ");
         try {
-            BufferedReader vReader = new BufferedReader(new InputStreamReader(getAssets().open("version")));
-            buffer.append(vReader.readLine());
-            vReader.close();
+            BufferedReader version = new BufferedReader(new InputStreamReader(getAssets().open("version")));
+            s.append(version.readLine());
+            version.close();
         } catch (IOException ex) {
-            buffer.append(ex.toString());
+            s.append(ex.toString());
         }
-        buffer.append("</p>");
+        s.append("</p>");
 
-        buffer.append("<p>Git branch: ");
+        s.append("<p>Git branch: ");
         try {
-            BufferedReader vBranch = new BufferedReader(new InputStreamReader(getAssets().open("branch")));
-            buffer.append(vBranch.readLine());
-            vBranch.close();
+            BufferedReader branch = new BufferedReader(new InputStreamReader(getAssets().open("branch")));
+            s.append(branch.readLine());
+            branch.close();
         } catch (IOException ex) {
-            buffer.append(ex.toString());
+            s.append(ex.toString());
         }
-        buffer.append("</p>");
-
-        return buffer.toString();
+        s.append("</p>");
     }
 
 
