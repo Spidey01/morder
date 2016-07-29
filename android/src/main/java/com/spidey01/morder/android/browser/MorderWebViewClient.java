@@ -16,10 +16,16 @@
 
 package com.spidey01.morder.android.browser;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.net.http.SslError;
 import android.util.Log;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import com.spidey01.morder.android.R;
+import com.spidey01.morder.android.browser.MorderWebView;
 
 
 /** Custom WebViewClient to load content in our own web view.
@@ -99,6 +105,79 @@ public class MorderWebViewClient
         super.onPageFinished(view, url);
         Log.v(TAG, "onPageFinished(): url="+url);
         mObserver.onPageFinished((MorderWebView)view, url);
+    }
+
+
+    /** Notify the host application that an SSL error occurred while loading a resource.
+     *
+     * The host application must call either handler.cancel() or
+     * handler.proceed(). Note that the decision may be retained for use in
+     * response to future SSL errors. The default behavior is to cancel the
+     * load.
+     *
+     * @param view The WebView that is initiating the callback.
+     * @param handler An SsslErrorHandler object that will handle the user's response.
+     * @param error The SSL error object.
+     */
+    @Override
+    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+        Log.e(TAG, "onReceivedSslError(): " + error.toString());
+
+        StringBuilder msg = new StringBuilder("SSL/TLS certificate: ");
+        switch(error.getPrimaryError()) {
+            case SslError.SSL_DATE_INVALID:
+                msg.append("invalid date");
+                break;
+            case SslError.SSL_EXPIRED:
+                msg.append("expired");
+                break;
+            case SslError.SSL_IDMISMATCH:
+                msg.append("hostname mismatch");
+                break;
+            case SslError.SSL_INVALID:
+                msg.append("invalid");
+                break;
+            case SslError.SSL_NOTYETVALID:
+                msg.append("not yet valid");
+                break;
+            case SslError.SSL_UNTRUSTED:
+                msg.append("untrusted");
+                break;
+        }
+        msg.append(" for ").append(error.getUrl());
+
+        final  SslErrorHandler h = handler;
+        final MorderWebView v = (MorderWebView)view;
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder
+            .setTitle(R.string.dialog_securityalert_title)
+            .setMessage(msg.toString())
+            .setPositiveButton(R.string.dialog_securityalert_positivebutton,
+                    new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int id) {
+                            Log.i(TAG, "User wishes to proceed");
+                            h.proceed();
+                        }
+                    })
+            .setNegativeButton(R.string.dialog_securityalert_negativebutton,
+                    new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int id) {
+                            Log.i(TAG, "User wishes to go back");
+                            h.cancel();
+                            if (v.canGoBack()) {
+                                Log.d(TAG, "Going back in time...");
+                                // Browser automatically handles this, yay!
+                                // v.goBack();
+                            } else {
+                                Log.w(TAG, "There is no back, let's go home!");
+                                v.loadUrl(v.getHomePage());
+                            }
+                        }
+                    })
+        /*
+            */
+            ;
+        builder.show();
     }
 
 

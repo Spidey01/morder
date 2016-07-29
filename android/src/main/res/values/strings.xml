@@ -64,4 +64,9 @@
     <!-- strings for AboutActivity -->
     <string name="title_activity_about">AboutActivity</string>
 
+    <!-- strings for various dialogs -->
+    <string name="dialog_securityalert_title">Security Alert</string>
+    <string name="dialog_securityalert_negativebutton">Go back</string>
+    <string name="dialog_securityalert_positivebutton">Continue</string>
+
 </resources>
