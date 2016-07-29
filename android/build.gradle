@@ -29,13 +29,13 @@ repositories {
 }
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion "20.0.0"
 
     defaultConfig {
         applicationId "com.spidey01.morder.android"
         minSdkVersion 19
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
