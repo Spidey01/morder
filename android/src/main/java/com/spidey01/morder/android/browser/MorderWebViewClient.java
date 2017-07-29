@@ -123,6 +123,7 @@ public class MorderWebViewClient
     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
         Log.e(TAG, "onReceivedSslError(): " + error.toString());
 
+        boolean onlyLogIt = false;
         StringBuilder msg = new StringBuilder("SSL/TLS certificate: ");
         switch(error.getPrimaryError()) {
             case SslError.SSL_DATE_INVALID:
@@ -132,7 +133,14 @@ public class MorderWebViewClient
                 msg.append("expired");
                 break;
             case SslError.SSL_IDMISMATCH:
+                /*
+                 * Pretty much any website that has advertising on it tends
+                 * throw a fuck ton of these.  So only log them instead of
+                 * putting up a bazillion diaglog boxes. Because we can't fix
+                 * the web and I am tired of this shit.
+                 */
                 msg.append("hostname mismatch");
+                onlyLogIt = true;
                 break;
             case SslError.SSL_INVALID:
                 msg.append("invalid");
@@ -147,6 +155,12 @@ public class MorderWebViewClient
         msg.append(" for ").append(error.getUrl());
 
         final  SslErrorHandler h = handler;
+
+        if (onlyLogIt) {
+            Log.w(TAG, msg.toString());
+            h.proceed();
+        }
+
         final MorderWebView v = (MorderWebView)view;
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         builder
