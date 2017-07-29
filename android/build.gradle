@@ -17,6 +17,9 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.0.0'
@@ -53,7 +56,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.android.support:support-core-ui:26.0.0'
 }
 
 
