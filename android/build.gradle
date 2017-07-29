@@ -33,9 +33,14 @@ repositories {
 
 /*
  * Ignored file used configure key signing.
+ * You'll need to use assembleDebug instead of build but
  */
 def keystoreProps = new Properties()
-keystoreProps.load(new FileInputStream(rootProject.file("keystore.properties")))
+try {
+    keystoreProps.load(new FileInputStream(rootProject.file("keystore.properties")))
+} catch(Exception ex) {
+    println "No keystore.properties file; release mode disabled."
+}
 
 android {
     compileSdkVersion 24

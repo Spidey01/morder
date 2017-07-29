@@ -14,11 +14,30 @@ Generally you should set JAVA\_HOME and ANDROID\_HOME to the roots of your JDK a
 Gradle Tasks
 ------------
 
-./gradlew build
+    ./gradlew build
 
-Will do a general build.
+Will do a general build of all flavours. You'll need the keystore setup.
 
-./gradlew installDebug
+Debug builds
+------------
+
+    ./gradlew assembleDebug
+    ./gradlew installDebug
 
 Will also try to shove it onto your device via the Android Debugging Bridge (adb).
+
+Release Builds
+--------------
+
+Create a keystore.properties file at the top of the git clone.
+
+    storePassword=Password for the keystore file.
+    keyPassword=Password for the private key.
+    keyAlias=Alias for this key
+    storeFile=/path/to/important/file.jks
+
+Now you can use the build target, or more explicitly:
+
+    ./gradlew assembleRelease
+    ./gradlew installRelease
 
