@@ -159,6 +159,7 @@ public class MorderWebViewClient
         if (onlyLogIt) {
             Log.w(TAG, msg.toString());
             h.proceed();
+            return;
         }
 
         final MorderWebView v = (MorderWebView)view;
