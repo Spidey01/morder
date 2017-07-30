@@ -17,11 +17,18 @@
 package com.spidey01.morder.android.browser;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.webkit.WebView;
 import com.spidey01.morder.android.R;
 
@@ -31,7 +38,8 @@ import com.spidey01.morder.android.R;
  */
 public class MorderWebView
     extends WebView
-    implements SharedPreferences.OnSharedPreferenceChangeListener
+    implements SharedPreferences.OnSharedPreferenceChangeListener,
+               MenuItem.OnMenuItemClickListener
 {
     private static final String TAG = "MorderWebView";
 
@@ -203,6 +211,7 @@ public class MorderWebView
 
     public void setup(SharedPreferences prefs) {
         Log.d(TAG, "setup()");
+
         // Do we need to unregister this view later?
         prefs.registerOnSharedPreferenceChangeListener(this);
 
@@ -281,5 +290,101 @@ public class MorderWebView
         }
     }
 
+
+    /** Called to create context menu.
+     *
+     * Our parent activity must call registerForContextMenu() on us or this will not be called.
+     * When the user long clicks on a link, we will get this callback to present our context menu.
+     */
+    @Override
+    protected void onCreateContextMenu(ContextMenu menu) {
+        super.onCreateContextMenu(menu);
+        Log.d(TAG, "onCreateContextMenu()");
+
+        /*
+         * Figure out what the user clicked on via WebView.HitTestResult.
+         * We might want different menus based on that.
+         */
+        HitTestResult target = getHitTestResult();
+        int resource = R.menu.menu_context_default;
+        switch (target.getType()) {
+            /*
+             * Some kind of text area. Let let the OS do its usual magic for
+             * stuff like copy and paste.
+             */
+            case HitTestResult.EDIT_TEXT_TYPE:
+                return;
+
+            /* <img> tag. */
+            case HitTestResult.IMAGE_TYPE:
+                Log.v(TAG, "context menu for <img> tag.");
+                break;
+            /* Special data types. */
+            case HitTestResult.EMAIL_TYPE:
+                Log.v(TAG, "context menu for email address.");
+            case HitTestResult.GEO_TYPE:
+                Log.v(TAG, "context menu for map location.");
+            case HitTestResult.PHONE_TYPE:
+                Log.v(TAG, "context menu for phone number.");
+                break;
+
+            /* <a src='http...'> */
+            case HitTestResult.SRC_ANCHOR_TYPE:
+                Log.v(TAG, "context menu for <a> tag.");
+                break;
+            case HitTestResult.SRC_IMAGE_ANCHOR_TYPE:
+                Log.v(TAG, "context menu for <img> tag inside <a> tag.");
+                break;
+
+            case HitTestResult.UNKNOWN_TYPE:
+            default:
+                Log.v(TAG, "context menu for unknown type.");
+                break;
+        }
+
+        MenuInflater inflater = new MenuInflater(getContext());
+        inflater.inflate(resource, menu);
+
+        /*
+         * Funny: there is a View.onCreateContextMenu() like
+         * Activity.onCreateContextMenu() but View has nothing like
+         * Activity.onContextItemSelected() or the associated. Only listeners.
+         *
+         * So either we rig a handler for each MenuItem or need to draw a
+         * bubble bath of overrides.
+         *
+         * Thanks a lot Google.
+         */
+        for (int i=0; i < menu.size(); ++i) {
+            MenuItem item = menu.getItem(i);
+            item.setOnMenuItemClickListener(this);
+        }
+
+        /* Typically makes the menu title the url that was touched. */
+        menu.setHeaderTitle(target.getExtra());
+    }
+
+
+    public boolean onMenuItemClick(MenuItem item) {
+        String what = getHitTestResult().getExtra();
+
+        Log.d(TAG, "onMenuItemClick(): \"" + item.getTitle() + "\" for: " + what);
+
+        Context ctx = getContext();
+
+        switch (item.getItemId()) {
+            case R.id.action_copy_link_address:
+                Log.v(TAG, "Copy the link.");
+
+                ClipboardManager clipboard = (ClipboardManager)ctx.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData data = ClipData.newUri(ctx.getContentResolver(), what, Uri.parse(what));
+                clipboard.setPrimaryClip(data);
+                break;
+            default:
+                return false;
+        }
+
+        return true;
+    }
 
 }

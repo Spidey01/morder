@@ -19,6 +19,8 @@
     <string name="action_forward">Go forward</string>
     <string name="action_share">Share</string>
     <string name="action_print">Print</string>
+    <string name="action_copy_link_address">Copy link address</string>
+    <string name="action_save_link_as">Save link as</string>
 
     <!-- strings for SettingsActivity & friends. -->
     <string name="title_activity_settings">SettingsActivity</string>

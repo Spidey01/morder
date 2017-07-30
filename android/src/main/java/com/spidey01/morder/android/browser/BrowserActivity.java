@@ -87,6 +87,7 @@ public class BrowserActivity
 
         mWebView = (MorderWebView)findViewById(R.id.webview);
         mWebView.setup(PreferenceManager.getDefaultSharedPreferences(this));
+        registerForContextMenu(mWebView);
         mWebView.setObserver(this);
         Intent intent = getIntent();
         if (intent.getData() == null) {
@@ -256,6 +257,13 @@ public class BrowserActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        Log.i(TAG, "I got a clicky on a thing");
+
+        return super.onContextItemSelected(item);
     }
 
 
