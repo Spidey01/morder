@@ -190,6 +190,8 @@ public class BrowserActivity
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
 
+        Log.d(TAG, "onConfigurationChanged(): " + newConfig.toString());
+
         /*
          * Handle landscape / portrait orientation change
          */
@@ -198,6 +200,11 @@ public class BrowserActivity
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             Log.d(TAG, "onConfigurationChanged(): Configuration.ORIENTATION_PORTRAIT");
         }
+
+        /*
+         * screenSize, smallestScreenSize, and screenLayout usually occur if
+         * orientation was changed, multi-window state was changed, etc.
+         */
     }
 
 
