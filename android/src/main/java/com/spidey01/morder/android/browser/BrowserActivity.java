@@ -16,6 +16,7 @@
 
 package com.spidey01.morder.android.browser;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -24,6 +25,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -31,23 +33,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.print.PrintAttributes;
 import android.print.PrintAttributes.Builder;
+import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintJob;
 import android.print.PrintManager;
 import android.support.annotation.NonNull;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.*;
+import android.widget.Toast;
 import com.spidey01.morder.android.BuildConfig;
-import com.spidey01.morder.android.ui.DrawerItemClickListener;
 import com.spidey01.morder.android.R;
 import com.spidey01.morder.android.ui.ActionBarDrawerToggle;
+import com.spidey01.morder.android.ui.DrawerItemClickListener;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -55,9 +60,13 @@ import java.net.URLEncoder;
 
 public class BrowserActivity
     extends Activity
-    implements MorderWebObserver, SharedPreferences.OnSharedPreferenceChangeListener
+    implements MorderWebObserver,
+               SharedPreferences.OnSharedPreferenceChangeListener,
+               ActivityCompat.OnRequestPermissionsResultCallback
 {
     private static final String TAG = "BrowserActivity";
+
+    public static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
 
     private DrawerItemClickListener mDrawerListener = new DrawerItemClickListener();
 
@@ -71,6 +80,8 @@ public class BrowserActivity
     private SearchView mSearchView;
 
     private boolean mShowSearchUi;
+
+    private boolean mCanWriteExternalStorage;
 
 
     @Override
@@ -629,6 +640,64 @@ public class BrowserActivity
                 } else {
                     disableSearchUi();
                 }
+                break;
+        }
+    }
+
+
+    public boolean getPermission(int permission, String why) {
+        String perm;
+        switch (permission) {
+            case REQUEST_WRITE_EXTERNAL_STORAGE:
+                perm = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+                break;
+            default:
+                return false;
+        }
+
+        int ok = ContextCompat.checkSelfPermission(this, perm);
+
+        if (ok == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, perm)) {
+            Toast.makeText(this, why, Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{perm}, permission);
+            // onRequestPermissionsResult will be called to set a flah.
+        }
+
+        switch (permission) {
+            case REQUEST_WRITE_EXTERNAL_STORAGE:
+                return mCanWriteExternalStorage;
+            default:
+                return false;
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        Log.d(TAG, "onRequestPermissionsResult()");
+
+        switch (requestCode) {
+            case REQUEST_WRITE_EXTERNAL_STORAGE:
+                {
+                    // If request is cancelled, the result arrays are empty.
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        Log.i(TAG, "Already have WRITE_EXTERNAL_STORAGE permission.");
+                        mCanWriteExternalStorage = true;
+                    } else {
+                        Log.w(TAG, "Permission WRITE_EXTERNAL_STORAGE was denied!");
+                        mCanWriteExternalStorage = false;
+                    }
+                    return;
+                }
+
+            default:
+                Log.e(TAG, "Bad request code: " + requestCode);
                 break;
         }
     }

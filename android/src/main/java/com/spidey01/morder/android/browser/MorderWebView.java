@@ -17,12 +17,16 @@
 package com.spidey01.morder.android.browser;
 
 import android.annotation.SuppressLint;
+import android.app.DownloadManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -379,6 +383,34 @@ public class MorderWebView
                 ClipboardManager clipboard = (ClipboardManager)ctx.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData data = ClipData.newUri(ctx.getContentResolver(), what, Uri.parse(what));
                 clipboard.setPrimaryClip(data);
+                break;
+            case R.id.action_save_link_as:
+                Log.v(TAG, "Save the link");
+
+                Uri uri = Uri.parse(what);
+                DownloadManager.Request r = new DownloadManager.Request(uri);
+
+                String where = uri.getLastPathSegment();
+                Log.d(TAG, "Saving as " + where);
+
+                /*
+                 * Marshmallow requires us to ask at runtime.
+                 */
+                String why = "Mörder: need storage permission to save link!";
+                BrowserActivity parent = (BrowserActivity)ctx;
+                if (!parent.getPermission(BrowserActivity.REQUEST_WRITE_EXTERNAL_STORAGE, why)) {
+                    return true;
+                }
+                r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, where);
+
+                r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+                Log.d(TAG, "Asking download manager to fetch: " + what);
+
+                DownloadManager downloads = (DownloadManager)ctx.getSystemService(Context.DOWNLOAD_SERVICE);
+                long ref = downloads.enqueue(r);
+                Log.v(TAG, "DownloadManager.enqueue() returnered id: " + ref);
+
                 break;
             default:
                 return false;
