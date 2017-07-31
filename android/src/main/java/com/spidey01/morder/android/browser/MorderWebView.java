@@ -323,14 +323,6 @@ public class MorderWebView
             case HitTestResult.IMAGE_TYPE:
                 Log.v(TAG, "context menu for <img> tag.");
                 break;
-            /* Special data types. */
-            case HitTestResult.EMAIL_TYPE:
-                Log.v(TAG, "context menu for email address.");
-            case HitTestResult.GEO_TYPE:
-                Log.v(TAG, "context menu for map location.");
-            case HitTestResult.PHONE_TYPE:
-                Log.v(TAG, "context menu for phone number.");
-                break;
 
             /* <a src='http...'> */
             case HitTestResult.SRC_ANCHOR_TYPE:
@@ -340,10 +332,23 @@ public class MorderWebView
                 Log.v(TAG, "context menu for <img> tag inside <a> tag.");
                 break;
 
+            /*
+             * Special data types.
+             * TODO: make them useful?
+             * For now ignore.
+             */
+            case HitTestResult.EMAIL_TYPE:
+                Log.v(TAG, "context menu for email address.");
+            case HitTestResult.GEO_TYPE:
+                Log.v(TAG, "context menu for map location.");
+            case HitTestResult.PHONE_TYPE:
+                Log.v(TAG, "context menu for phone number.");
+
+            /* Something else like document text. */
             case HitTestResult.UNKNOWN_TYPE:
             default:
                 Log.v(TAG, "context menu for unknown type.");
-                break;
+                return;
         }
 
         MenuInflater inflater = new MenuInflater(getContext());
